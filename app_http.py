@@ -20,7 +20,12 @@ from datetime import datetime
 import requests
 import streamlit as st
 from dotenv import load_dotenv
-
+from search_rag import search_rag
+from sql_agent import (
+    generate_sql,
+    validate_sql,
+    query_mysql
+)
 
 # ============================================================
 # 1. Streamlit 页面设置
@@ -81,15 +86,44 @@ SYSTEM_PROMPT = """
 
 【工具使用规则】
 
-1. 用户要求数学计算时，使用 calculator。
-2. 用户询问当前日期或时间时，使用 get_current_time。
-3. 用户询问最新新闻、实时信息、当前事件、
-   最新技术发展或可能已经变化的信息时，
-   使用 web_search。
-4. 普通知识问题不需要工具时直接回答。
-5. 不要为了展示工具而调用工具。
-6. 不允许编造工具执行结果。
-7. 工具失败时明确告诉用户。
+工具使用规则：
+
+1. 数学计算问题使用 calculator。
+2. 当前时间问题使用 get_current_time。
+3. 最新新闻、实时事件、互联网动态使用 web_search。
+4. 当用户询问内部研究报告、品牌营销趋势、
+   消费者洞察、营销观点等非结构化知识时，
+   使用 search_knowledge_base。
+5. 当用户询问数据库中的结构化数据，例如：
+   - 品牌
+   - 帖子
+   - 达人
+   - 点赞数
+   - 评论数
+   - 收藏数
+   - 浏览量
+   - 排名
+   - 平均值
+   - Campaign
+   - ROI
+   - 投放表现
+   使用 query_marketing_database。
+6. 如果问题需要研究报告内容，优先使用知识库；
+   如果问题需要精确数字或数据库统计，优先使用 MySQL。
+
+7. query_marketing_database 返回 SQL 和真实数据库查询结果。
+   最终回答只能根据这些返回结果回答，
+   不得修改、补充或编造数据库中的数字。
+
+8. search_knowledge_base 返回知识库检索片段。
+   最终回答需要基于这些片段进行总结。
+   如果知识库证据不足，需要明确说明。
+
+9. 不需要工具的问题直接回答。
+
+10. 不允许编造工具执行结果。
+
+11. 工具失败时明确告诉用户。
 
 【回答要求】
 
@@ -196,7 +230,74 @@ def web_search(query: str):
 
     return simplified_results
 
+def search_knowledge_base(query: str):
+    """
+    搜索本地 RAG 知识库，返回最相关的文档片段。
+    """
 
+    results = search_rag(
+        question=query,
+        top_k=3
+    )
+
+    documents = results["documents"][0]
+    metadatas = results["metadatas"][0]
+    distances = results["distances"][0]
+
+    rag_results = []
+
+    for document, metadata, distance in zip(
+        documents,
+        metadatas,
+        distances
+    ):
+
+        rag_results.append(
+            {
+                "source": metadata.get(
+                    "source",
+                    "Unknown"
+                ),
+                "section": metadata.get(
+                    "section",
+                    "Unknown"
+                ),
+                "content": document,
+                "distance": float(distance)
+            }
+        )
+
+    return rag_results
+def query_marketing_database(question: str):
+    """
+    将自然语言问题转换为只读 SQL，
+    查询 MySQL，
+    返回真实数据库结果给外层 Agent。
+    """
+
+    # 1. LLM 生成 SQL
+    sql = generate_sql(
+        question
+    )
+
+    # 3. 安全检查
+    validate_sql(
+        sql
+    )
+
+    # 4. 查询数据库
+    rows = query_mysql(
+        sql
+    )
+
+    # 5. 不在这里生成自然语言答案
+    #    直接返回原始查询结果
+    return {
+        "question": question,
+        "sql": sql,
+        "row_count": len(rows),
+        "rows": rows
+    }
 # ============================================================
 # 7. Tool Schema
 # ============================================================
@@ -325,7 +426,80 @@ TOOLS = [
                 ]
             }
         }
+    },
+    # --------------------------------------------------------
+    # search_knowledge_base
+    # --------------------------------------------------------
+
+    {
+        "type": "function",
+
+        "function": {
+
+            "name": "search_knowledge_base",
+
+            "description":
+                "搜索内部营销研究 RAG 知识库。"
+                "当用户询问品牌营销趋势、营销洞察、"
+                "广告主行为、营销投资、消费者趋势等"
+                "知识库中可能存在的信息时使用。",
+
+            "parameters": {
+
+                "type": "object",
+
+                "properties": {
+
+                    "query": {
+                        "type": "string",
+                        "description":
+                            "需要在内部知识库中检索的问题"
+                    }
+
+                },
+
+                "required": [
+                    "query"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+
+        "function": {
+
+            "name": "query_marketing_database",
+
+            "description":
+                "查询内部 MySQL 营销数据库并返回真实 SQL 查询结果。"
+                "当用户询问品牌、帖子、达人、互动量、"
+                "浏览量、Campaign、投放表现、ROI、"
+                "排名、平均值、数量统计等结构化数据时使用。"
+                "该工具返回 SQL、结果行数和数据库原始结果，"
+                "请基于返回结果生成最终回答。",
+
+            "parameters": {
+
+                "type": "object",
+
+                "properties": {
+
+                    "question": {
+                        "type": "string",
+                        "description":
+                            "需要使用内部 MySQL 数据库回答的问题"
+                    }
+
+                },
+
+                "required": [
+                    "question"
+                ]
+            }
+        }
     }
+
 ]
 
 
@@ -364,7 +538,18 @@ def execute_tool(tool_name: str, arguments: dict):
             query=arguments["query"]
         )
 
+    elif tool_name == "search_knowledge_base":
 
+        return search_knowledge_base(
+            query=arguments["query"]
+        )
+    elif tool_name == "query_marketing_database":
+
+        result = query_marketing_database(
+            question=arguments["question"]
+        )
+
+        return result
     else:
 
         raise ValueError(
@@ -609,7 +794,13 @@ def run_agent(messages, tool_status_placeholder):
                     "🕐 正在获取当前时间...",
 
                 "web_search":
-                    "🔎 正在搜索互联网..."
+                    "🔎 正在搜索互联网...",
+
+                "search_knowledge_base":
+                    "📚 正在搜索内部知识库...",
+
+                "query_marketing_database":
+                    "🗄️ 正在查询内部营销数据库..."
             }
 
 
