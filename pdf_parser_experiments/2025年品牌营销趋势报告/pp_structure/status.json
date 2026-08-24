@@ -1,0 +1,6 @@
+{
+  "tool": "pp_structure",
+  "status": "skipped",
+  "seconds": 0,
+  "error": "PaddleOCR PPStructure import failed: No module named 'paddleocr'"
+}

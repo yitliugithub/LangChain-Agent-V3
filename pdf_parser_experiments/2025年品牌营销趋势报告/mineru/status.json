@@ -1,0 +1,6 @@
+{
+  "tool": "mineru",
+  "status": "skipped",
+  "seconds": 0,
+  "error": "MinerU CLI not found. Install MinerU first, then ensure the `mineru` command is on PATH."
+}

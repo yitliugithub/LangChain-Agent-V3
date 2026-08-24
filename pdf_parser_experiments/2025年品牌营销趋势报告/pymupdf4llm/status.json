@@ -1,0 +1,6 @@
+{
+  "tool": "pymupdf4llm",
+  "status": "failed",
+  "seconds": 0.0,
+  "error": "No module named 'pymupdf4llm'"
+}
