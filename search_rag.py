@@ -1,263 +1,109 @@
-# Author: Yiting Liu
-# Time 22/8/2026 AM12:54
-import chromadb
-
-from sentence_transformers import SentenceTransformer
-
-
-# ============================================================
-# 1. 配置
-# ============================================================
-
 CHROMA_DIR = "chroma_db"
-
 COLLECTION_NAME = "marketing_knowledge"
-
 EMBEDDING_MODEL_NAME = (
     "sentence-transformers/"
     "paraphrase-multilingual-MiniLM-L12-v2"
 )
 
-
-# ============================================================
-# 2. 加载 Embedding Model
-# ============================================================
-
-print("正在加载 Embedding Model...")
-
-embedding_model = SentenceTransformer(
-    EMBEDDING_MODEL_NAME
-)
-
-print("Embedding Model 加载完成。")
+_embedding_model = None
+_collection = None
 
 
-# ============================================================
-# 3. 连接 ChromaDB
-# ============================================================
+def get_embedding_model():
+    global _embedding_model
+    if _embedding_model is None:
+        from sentence_transformers import SentenceTransformer
 
-client = chromadb.PersistentClient(
-    path=CHROMA_DIR
-)
-
-collection = client.get_collection(
-    name=COLLECTION_NAME
-)
+        print("正在加载 Embedding Model...")
+        _embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        print("Embedding Model 加载完成。")
+    return _embedding_model
 
 
-# ============================================================
-# 4. Query Embedding
-# ============================================================
+def get_collection():
+    global _collection
+    if _collection is None:
+        import chromadb
 
-def create_query_embedding(
-    question: str
-):
+        client = chromadb.PersistentClient(path=CHROMA_DIR)
+        _collection = client.get_collection(name=COLLECTION_NAME)
+    return _collection
 
-    embedding = embedding_model.encode(
 
+def create_query_embedding(question: str):
+    model = get_embedding_model()
+    return model.encode(
         question,
-
         normalize_embeddings=True,
-
-        show_progress_bar=False
-
-    )
-
-    return embedding
-
-
-# ============================================================
-# 5. RAG Search
-# ============================================================
-
-def search_rag(
-    question: str,
-    top_k: int = 3
-):
-
-    # --------------------------------------------------------
-    # Step 1
-    # Question → Embedding
-    # --------------------------------------------------------
-
-    query_embedding = (
-        create_query_embedding(
-            question
-        )
+        show_progress_bar=False,
     )
 
 
-    # --------------------------------------------------------
-    # Step 2
-    # Chroma Similarity Search
-    # --------------------------------------------------------
+def search_rag(question: str, top_k: int = 3):
+    collection = get_collection()
+    query_embedding = create_query_embedding(question)
 
-    results = collection.query(
-
-        query_embeddings=[
-            query_embedding.tolist()
-        ],
-
+    return collection.query(
+        query_embeddings=[query_embedding.tolist()],
         n_results=top_k,
-
-        include=[
-            "documents",
-            "metadatas",
-            "distances"
-        ]
-
+        include=["documents", "metadatas", "distances"],
     )
 
 
-    return results
+def format_results(results):
+    formatted = []
+    documents = results.get("documents", [[]])[0]
+    metadatas = results.get("metadatas", [[]])[0]
+    distances = results.get("distances", [[]])[0]
 
-
-# ============================================================
-# 6. 打印结果
-# ============================================================
-
-def print_results(
-    question,
-    results
-):
-
-    print(
-        "\n===================================="
-    )
-
-    print(
-        f"问题：{question}"
-    )
-
-    print(
-        "===================================="
-    )
-
-
-    documents = (
-        results["documents"][0]
-    )
-
-    metadatas = (
-        results["metadatas"][0]
-    )
-
-    distances = (
-        results["distances"][0]
-    )
-
-
-    for index, (
-        document,
-        metadata,
-        distance
-    ) in enumerate(
-
-        zip(
-            documents,
-            metadatas,
-            distances
-        ),
-
-        start=1
-
-    ):
-
-
-        print(
-            f"\n---------- Result {index} ----------"
+    for document, metadata, distance in zip(documents, metadatas, distances):
+        formatted.append(
+            {
+                "source": metadata.get("source"),
+                "section": metadata.get("section"),
+                "chunk_index": metadata.get("chunk_index"),
+                "chunk_method": metadata.get("chunk_method"),
+                "distance": float(distance),
+                "content": document,
+            }
         )
 
-
-        print(
-            f"Source: "
-            f"{metadata.get('source')}"
-        )
+    return formatted
 
 
-        print(
-            f"Section: "
-            f"{metadata.get('section')}"
-        )
+def print_results(question, results):
+    print("\n====================================")
+    print(f"问题：{question}")
+    print("====================================")
 
+    for index, item in enumerate(format_results(results), start=1):
+        print(f"\n---------- Result {index} ----------")
+        print(f"Source: {item['source']}")
+        print(f"Section: {item['section']}")
+        print(f"Distance: {item['distance']:.4f}")
+        print("\nContent:")
+        print(item["content"])
 
-        print(
-            f"Distance: "
-            f"{distance:.4f}"
-        )
-
-
-        print(
-            "\nContent:"
-        )
-
-
-        print(
-            document
-        )
-
-
-# ============================================================
-# 7. CLI
-# ============================================================
 
 def main():
-
-    print(
-        "\nRAG Retriever 已启动。"
-    )
-
-    print(
-        "输入 quit 退出。\n"
-    )
-
+    print("\nRAG Retriever 已启动。")
+    print("输入 quit 退出。\n")
 
     while True:
-
-        question = input(
-            "请输入问题："
-        ).strip()
-
+        question = input("请输入问题：").strip()
 
         if question.lower() == "quit":
-
-            print(
-                "程序结束。"
-            )
-
+            print("程序结束。")
             break
-
-
         if not question:
-
             continue
 
-
         try:
+            results = search_rag(question, top_k=3)
+            print_results(question, results)
+        except Exception as exc:
+            print(f"检索失败：{exc}")
 
-            results = search_rag(
-                question,
-                top_k=3
-            )
-
-
-            print_results(
-                question,
-                results
-            )
-
-
-        except Exception as e:
-
-            print(
-                f"检索失败：{e}"
-            )
-
-
-# ============================================================
-# 8. Main
-# ============================================================
 
 if __name__ == "__main__":
-
     main()
