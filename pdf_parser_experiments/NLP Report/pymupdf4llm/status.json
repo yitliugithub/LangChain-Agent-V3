@@ -1,0 +1,6 @@
+{
+  "tool": "pymupdf4llm",
+  "status": "success",
+  "seconds": 2.26,
+  "output": "pdf_parser_experiments/NLP Report/pymupdf4llm/output.md"
+}

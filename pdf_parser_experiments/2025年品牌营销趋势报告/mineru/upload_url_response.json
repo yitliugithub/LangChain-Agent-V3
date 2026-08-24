@@ -1,0 +1,11 @@
+{
+  "code": 0,
+  "msg": "ok",
+  "trace_id": "dce1b29670a350924c93dfd8de617f87",
+  "data": {
+    "batch_id": "59bb733a-b824-4c47-bbdf-67a6e103010e",
+    "file_urls": [
+      "https://mineru.oss-cn-shanghai.aliyuncs.com/api-upload/extract/2026-08-24/59bb733a-b824-4c47-bbdf-67a6e103010e/b6e37a07-ad9e-40a7-ab49-ed8fe8afc101.pdf?Expires=1787641658&OSSAccessKeyId=LTAI5t8fSGMgiRhQn4mpp926&Signature=O0vTZDzZButEUYuhk%2Fyqkw69ZhQ%3D"
+    ]
+  }
+}

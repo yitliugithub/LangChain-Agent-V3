@@ -38,6 +38,15 @@ def save_status(output_dir: Path, tool_name: str, status: dict):
     )
 
 
+def save_progress(output_dir: Path, tool_name: str, progress: dict):
+    progress_path = output_dir / tool_name / "progress.json"
+    progress_path.parent.mkdir(parents=True, exist_ok=True)
+    progress_path.write_text(
+        json.dumps(progress, ensure_ascii=False, indent=2, default=str),
+        encoding="utf-8",
+    )
+
+
 def collect_pdfs(input_path: Path):
     if input_path.is_file() and input_path.suffix.lower() == ".pdf":
         return [input_path]
@@ -132,9 +141,24 @@ def request_mineru_upload_url(pdf_path: Path, output_dir: Path, options: dict):
     return batch_id, file_urls[0], payload
 
 
-def upload_file_to_mineru(pdf_path: Path, upload_url: str):
+def upload_file_to_mineru(pdf_path: Path, upload_url: str, output_dir: Path):
+    response_path = output_dir / "upload_response.json"
     with pdf_path.open("rb") as file:
-        response = requests.put(upload_url, data=file, timeout=300)
+        response = requests.put(upload_url, data=file, timeout=(30, 300))
+
+    response_path.write_text(
+        json.dumps(
+            {
+                "status_code": response.status_code,
+                "reason": response.reason,
+                "headers": dict(response.headers),
+                "text_tail": response.text[-2000:] if response.text else "",
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
     response.raise_for_status()
     return response.status_code
 
@@ -210,13 +234,59 @@ def parse_with_mineru_api(pdf_path: Path, output_dir: Path, options: dict):
     mineru_output_dir.mkdir(parents=True, exist_ok=True)
 
     try:
+        save_progress(
+            output_dir,
+            tool_name,
+            {
+                "stage": "request_upload_url",
+                "pdf": str(pdf_path),
+                "pdf_size_bytes": pdf_path.stat().st_size,
+                "seconds": round(now_seconds() - start, 2),
+            },
+        )
+        print("[MinerU] requesting upload URL...")
         batch_id, upload_url, payload = request_mineru_upload_url(
             pdf_path,
             mineru_output_dir,
             options,
         )
-        upload_status = upload_file_to_mineru(pdf_path, upload_url)
+        save_progress(
+            output_dir,
+            tool_name,
+            {
+                "stage": "upload_url_received",
+                "batch_id": batch_id,
+                "pdf": str(pdf_path),
+                "pdf_size_bytes": pdf_path.stat().st_size,
+                "seconds": round(now_seconds() - start, 2),
+            },
+        )
+        print(
+            "[MinerU] upload URL received. Uploading PDF "
+            f"({pdf_path.stat().st_size} bytes)..."
+        )
+        upload_status = upload_file_to_mineru(pdf_path, upload_url, mineru_output_dir)
+        save_progress(
+            output_dir,
+            tool_name,
+            {
+                "stage": "upload_finished",
+                "batch_id": batch_id,
+                "upload_status": upload_status,
+                "seconds": round(now_seconds() - start, 2),
+            },
+        )
+        print(f"[MinerU] upload finished with HTTP {upload_status}. Polling result...")
         final_result = poll_mineru_batch_result(batch_id, mineru_output_dir, options)
+        save_progress(
+            output_dir,
+            tool_name,
+            {
+                "stage": "poll_finished",
+                "batch_id": batch_id,
+                "seconds": round(now_seconds() - start, 2),
+            },
+        )
 
         write_text(
             mineru_output_dir / "final_result.json",
