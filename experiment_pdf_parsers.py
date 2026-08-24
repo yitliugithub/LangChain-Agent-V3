@@ -1,14 +1,23 @@
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import tempfile
 import time
+import zipfile
 from pathlib import Path
+
+import requests
+from dotenv import load_dotenv
 
 
 DEFAULT_INPUT_DIR = "rag_data"
 DEFAULT_OUTPUT_DIR = "pdf_parser_experiments"
+MINERU_API_BASE = "https://mineru.net"
+
+
+load_dotenv(override=True)
 
 
 def now_seconds():
@@ -66,7 +75,194 @@ def parse_with_pymupdf4llm(pdf_path: Path, output_dir: Path):
     return status
 
 
-def parse_with_mineru(pdf_path: Path, output_dir: Path):
+def get_mineru_api_key():
+    return os.getenv("MinerU_API_KEY") or os.getenv("MINERU_API_KEY")
+
+
+def mineru_headers(token: str):
+    return {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+
+
+def request_mineru_upload_url(pdf_path: Path, output_dir: Path, options: dict):
+    token = get_mineru_api_key()
+    if not token:
+        raise ValueError("Missing MinerU_API_KEY in .env")
+
+    payload_file = {
+        "name": pdf_path.name,
+        "data_id": pdf_path.stem[:120],
+    }
+    if options.get("is_ocr"):
+        payload_file["is_ocr"] = True
+    if options.get("page_ranges"):
+        payload_file["page_ranges"] = options["page_ranges"]
+
+    payload = {
+        "files": [payload_file],
+        "model_version": options.get("model_version", "vlm"),
+        "enable_formula": options.get("enable_formula", True),
+        "enable_table": options.get("enable_table", True),
+        "language": options.get("language", "ch"),
+    }
+
+    response = requests.post(
+        f"{MINERU_API_BASE}/api/v4/file-urls/batch",
+        headers=mineru_headers(token),
+        json=payload,
+        timeout=60,
+    )
+    response.raise_for_status()
+    result = response.json()
+    write_text(
+        output_dir / "upload_url_response.json",
+        json.dumps(result, ensure_ascii=False, indent=2),
+    )
+
+    if result.get("code") != 0:
+        raise ValueError(f"MinerU upload URL request failed: {result}")
+
+    batch_id = result["data"]["batch_id"]
+    file_urls = result["data"]["file_urls"]
+    if not file_urls:
+        raise ValueError("MinerU did not return any upload URL.")
+
+    return batch_id, file_urls[0], payload
+
+
+def upload_file_to_mineru(pdf_path: Path, upload_url: str):
+    with pdf_path.open("rb") as file:
+        response = requests.put(upload_url, data=file, timeout=300)
+    response.raise_for_status()
+    return response.status_code
+
+
+def poll_mineru_batch_result(batch_id: str, output_dir: Path, options: dict):
+    token = get_mineru_api_key()
+    deadline = time.time() + options.get("timeout", 900)
+    poll_interval = options.get("poll_interval", 5)
+    poll_url = f"{MINERU_API_BASE}/api/v4/extract-results/batch/{batch_id}"
+
+    last_result = None
+    while time.time() < deadline:
+        response = requests.get(
+            poll_url,
+            headers=mineru_headers(token),
+            timeout=60,
+        )
+        response.raise_for_status()
+        last_result = response.json()
+        write_text(
+            output_dir / "latest_poll_response.json",
+            json.dumps(last_result, ensure_ascii=False, indent=2),
+        )
+
+        if last_result.get("code") != 0:
+            raise ValueError(f"MinerU poll failed: {last_result}")
+
+        extract_results = last_result.get("data", {}).get("extract_result", [])
+        states = [item.get("state") for item in extract_results]
+
+        if extract_results and all(state == "done" for state in states):
+            return last_result
+        if any(state == "failed" for state in states):
+            return last_result
+
+        print(f"[MinerU] batch {batch_id} states: {states}")
+        time.sleep(poll_interval)
+
+    raise TimeoutError(
+        f"MinerU task did not finish within {options.get('timeout', 900)} seconds. "
+        f"Last result: {last_result}"
+    )
+
+
+def download_and_extract_mineru_zip(full_zip_url: str, output_dir: Path):
+    zip_path = output_dir / "full_result.zip"
+    extract_dir = output_dir / "zip_extract"
+    extract_dir.mkdir(parents=True, exist_ok=True)
+
+    response = requests.get(full_zip_url, timeout=300)
+    response.raise_for_status()
+    zip_path.write_bytes(response.content)
+
+    with zipfile.ZipFile(zip_path, "r") as zip_file:
+        zip_file.extractall(extract_dir)
+
+    markdown_candidates = sorted(extract_dir.rglob("full.md"))
+    if not markdown_candidates:
+        markdown_candidates = sorted(extract_dir.rglob("*.md"))
+
+    if markdown_candidates:
+        markdown_text = markdown_candidates[0].read_text(encoding="utf-8")
+        write_text(output_dir / "output.md", markdown_text)
+        return markdown_candidates[0]
+
+    return None
+
+
+def parse_with_mineru_api(pdf_path: Path, output_dir: Path, options: dict):
+    tool_name = "mineru"
+    start = now_seconds()
+    mineru_output_dir = output_dir / tool_name
+    mineru_output_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        batch_id, upload_url, payload = request_mineru_upload_url(
+            pdf_path,
+            mineru_output_dir,
+            options,
+        )
+        upload_status = upload_file_to_mineru(pdf_path, upload_url)
+        final_result = poll_mineru_batch_result(batch_id, mineru_output_dir, options)
+
+        write_text(
+            mineru_output_dir / "final_result.json",
+            json.dumps(final_result, ensure_ascii=False, indent=2),
+        )
+
+        extract_results = final_result.get("data", {}).get("extract_result", [])
+        first_result = extract_results[0] if extract_results else {}
+        state = first_result.get("state")
+        full_zip_url = first_result.get("full_zip_url")
+
+        markdown_path = None
+        if state == "done" and full_zip_url:
+            markdown_path = download_and_extract_mineru_zip(
+                full_zip_url,
+                mineru_output_dir,
+            )
+
+        status = {
+            "tool": tool_name,
+            "mode": "api_v4_batch_local_upload",
+            "status": "success" if state == "done" else "failed",
+            "seconds": round(now_seconds() - start, 2),
+            "batch_id": batch_id,
+            "upload_status": upload_status,
+            "request_payload": payload,
+            "state": state,
+            "error": first_result.get("err_msg", ""),
+            "full_zip_url": full_zip_url,
+            "output": str(mineru_output_dir / "output.md") if markdown_path else "",
+            "markdown_source_in_zip": str(markdown_path) if markdown_path else "",
+        }
+    except Exception as exc:
+        status = {
+            "tool": tool_name,
+            "mode": "api_v4_batch_local_upload",
+            "status": "failed",
+            "seconds": round(now_seconds() - start, 2),
+            "error": str(exc),
+        }
+
+    save_status(output_dir, tool_name, status)
+    return status
+
+
+def parse_with_mineru_cli(pdf_path: Path, output_dir: Path):
     tool_name = "mineru"
     start = now_seconds()
     mineru_cmd = shutil.which("mineru")
@@ -123,6 +319,12 @@ def parse_with_mineru(pdf_path: Path, output_dir: Path):
 
     save_status(output_dir, tool_name, status)
     return status
+
+
+def parse_with_mineru(pdf_path: Path, output_dir: Path, options: dict):
+    if get_mineru_api_key():
+        return parse_with_mineru_api(pdf_path, output_dir, options)
+    return parse_with_mineru_cli(pdf_path, output_dir)
 
 
 def _pdf_to_page_images(pdf_path: Path, image_dir: Path, dpi_scale: float = 2.0):
@@ -291,7 +493,12 @@ Follow-up action:
     write_text(pdf_output_dir / "review_checklist.md", template)
 
 
-def run_experiment(pdf_path: Path, output_root: Path, tools: list[str]):
+def run_experiment(
+    pdf_path: Path,
+    output_root: Path,
+    tools: list[str],
+    mineru_options: dict,
+):
     pdf_output_dir = output_root / pdf_path.stem
     pdf_output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -299,7 +506,7 @@ def run_experiment(pdf_path: Path, output_root: Path, tools: list[str]):
     if "pymupdf4llm" in tools:
         statuses.append(parse_with_pymupdf4llm(pdf_path, pdf_output_dir))
     if "mineru" in tools:
-        statuses.append(parse_with_mineru(pdf_path, pdf_output_dir))
+        statuses.append(parse_with_mineru(pdf_path, pdf_output_dir, mineru_options))
     if "pp_structure" in tools:
         statuses.append(parse_with_pp_structure(pdf_path, pdf_output_dir))
 
@@ -329,6 +536,34 @@ def main():
         choices=["pymupdf4llm", "mineru", "pp_structure"],
         help="Parsers to run.",
     )
+    parser.add_argument(
+        "--mineru-model",
+        default="vlm",
+        choices=["pipeline", "vlm"],
+        help="MinerU precise API model_version for PDF parsing.",
+    )
+    parser.add_argument(
+        "--mineru-ocr",
+        action="store_true",
+        help="Enable OCR for MinerU. Useful for scanned PDFs.",
+    )
+    parser.add_argument(
+        "--mineru-page-ranges",
+        default="",
+        help='Optional MinerU page range, for example "1-5" or "2,4-6".',
+    )
+    parser.add_argument(
+        "--mineru-timeout",
+        type=int,
+        default=900,
+        help="Maximum seconds to wait for MinerU API result.",
+    )
+    parser.add_argument(
+        "--mineru-poll-interval",
+        type=int,
+        default=5,
+        help="Seconds between MinerU polling requests.",
+    )
 
     args = parser.parse_args()
     input_path = Path(args.input)
@@ -342,9 +577,20 @@ def main():
     print(f"Found {len(pdfs)} PDF file(s).")
     print(f"Output directory: {output_root}")
 
+    mineru_options = {
+        "model_version": args.mineru_model,
+        "is_ocr": args.mineru_ocr,
+        "page_ranges": args.mineru_page_ranges,
+        "enable_formula": True,
+        "enable_table": True,
+        "language": "ch",
+        "timeout": args.mineru_timeout,
+        "poll_interval": args.mineru_poll_interval,
+    }
+
     for pdf_path in pdfs:
         print(f"\n=== Running parser experiment for {pdf_path} ===")
-        statuses = run_experiment(pdf_path, output_root, args.tools)
+        statuses = run_experiment(pdf_path, output_root, args.tools, mineru_options)
         for status in statuses:
             print(
                 f"- {status['tool']}: {status['status']} "
