@@ -397,7 +397,37 @@ def parse_with_mineru(pdf_path: Path, output_dir: Path, options: dict):
     return parse_with_mineru_cli(pdf_path, output_dir)
 
 
-def _pdf_to_page_images(pdf_path: Path, image_dir: Path, dpi_scale: float = 2.0):
+def parse_page_range(page_range: str, total_pages: int):
+    if not page_range:
+        return list(range(total_pages))
+
+    selected_pages = set()
+    for part in page_range.split(","):
+        part = part.strip()
+        if not part:
+            continue
+
+        if "-" in part:
+            start_text, end_text = part.split("-", 1)
+            start = int(start_text)
+            end = int(end_text)
+            for page in range(start, end + 1):
+                if 1 <= page <= total_pages:
+                    selected_pages.add(page - 1)
+        else:
+            page = int(part)
+            if 1 <= page <= total_pages:
+                selected_pages.add(page - 1)
+
+    return sorted(selected_pages)
+
+
+def _pdf_to_page_images(
+    pdf_path: Path,
+    image_dir: Path,
+    dpi_scale: float = 2.0,
+    page_range: str = "",
+):
     import fitz
 
     image_dir.mkdir(parents=True, exist_ok=True)
@@ -406,16 +436,63 @@ def _pdf_to_page_images(pdf_path: Path, image_dir: Path, dpi_scale: float = 2.0)
 
     try:
         matrix = fitz.Matrix(dpi_scale, dpi_scale)
-        for page_index in range(document.page_count):
+        page_indexes = parse_page_range(page_range, document.page_count)
+        for page_index in page_indexes:
             page = document.load_page(page_index)
             pixmap = page.get_pixmap(matrix=matrix, alpha=False)
             image_path = image_dir / f"page_{page_index + 1:04d}.png"
             pixmap.save(str(image_path))
-            image_paths.append(image_path)
+            image_paths.append((page_index + 1, image_path))
     finally:
         document.close()
 
     return image_paths
+
+
+def create_pp_structure_engine(options: dict):
+    from paddleocr import PPStructure
+
+    mode = options.get("mode", "full")
+    show_log = options.get("show_log", True)
+
+    if mode == "layout_only":
+        return PPStructure(
+            show_log=show_log,
+            recovery=False,
+            return_ocr_result_in_table=False,
+        )
+    if mode == "table_only":
+        return PPStructure(
+            show_log=show_log,
+            layout=False,
+            table=True,
+            ocr=True,
+            recovery=False,
+        )
+
+    return PPStructure(
+        show_log=show_log,
+        recovery=False,
+        return_ocr_result_in_table=True,
+    )
+
+
+def block_bbox(block):
+    bbox = block.get("bbox") or block.get("bounding_box")
+    if bbox is None:
+        return []
+    return [float(value) for value in bbox]
+
+
+def sort_blocks_for_reading(blocks):
+    def sort_key(block):
+        bbox = block_bbox(block)
+        if len(bbox) >= 4:
+            x1, y1, _, _ = bbox
+            return (round(y1 / 20) * 20, x1)
+        return (10**9, 10**9)
+
+    return sorted(blocks, key=sort_key)
 
 
 def _ppstructure_result_to_markdown(page_number: int, result):
@@ -423,6 +500,7 @@ def _ppstructure_result_to_markdown(page_number: int, result):
 
     for block_index, block in enumerate(result, start=1):
         block_type = block.get("type", "unknown")
+        bbox = block_bbox(block)
         text = ""
 
         if isinstance(block.get("res"), list):
@@ -438,12 +516,14 @@ def _ppstructure_result_to_markdown(page_number: int, result):
 
         if text:
             lines.append(f"\n### Block {block_index}: {block_type}\n")
+            if bbox:
+                lines.append(f"bbox: {bbox}\n")
             lines.append(text)
 
     return "\n".join(lines)
 
 
-def parse_with_pp_structure(pdf_path: Path, output_dir: Path):
+def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
     tool_name = "pp_structure"
     start = now_seconds()
 
@@ -465,14 +545,29 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path):
     try:
         import cv2
 
-        markdown_parts = [f"# PP-Structure Output\n\nSource: {pdf_path.name}\n"]
+        pp_output_dir = output_dir / tool_name
+        pp_output_dir.mkdir(parents=True, exist_ok=True)
+
+        markdown_parts = [
+            "# PP-Structure Output\n",
+            f"Source: {pdf_path.name}\n",
+            f"Mode: {options.get('mode', 'full')}\n",
+            f"DPI scale: {options.get('dpi_scale', 2.0)}\n",
+            f"Page range: {options.get('page_range', '') or 'all'}\n",
+        ]
         raw_results = []
 
         with tempfile.TemporaryDirectory() as temp_dir:
-            image_paths = _pdf_to_page_images(pdf_path, Path(temp_dir))
-            engine = PPStructure(show_log=True)
+            image_paths = _pdf_to_page_images(
+                pdf_path,
+                Path(temp_dir),
+                dpi_scale=options.get("dpi_scale", 2.0),
+                page_range=options.get("page_range", ""),
+            )
+            engine = create_pp_structure_engine(options)
 
-            for page_number, image_path in enumerate(image_paths, start=1):
+            for page_number, image_path in image_paths:
+                print(f"[PP-Structure] parsing page {page_number}: {image_path.name}")
                 image = cv2.imread(str(image_path))
                 result = engine(image)
                 serializable_result = []
@@ -481,6 +576,9 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path):
                     clean_block = dict(block)
                     clean_block.pop("img", None)
                     serializable_result.append(clean_block)
+
+                if options.get("sort_blocks", True):
+                    serializable_result = sort_blocks_for_reading(serializable_result)
 
                 raw_results.append(
                     {
@@ -502,6 +600,9 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path):
             "tool": tool_name,
             "status": "success",
             "seconds": round(now_seconds() - start, 2),
+            "mode": options.get("mode", "full"),
+            "dpi_scale": options.get("dpi_scale", 2.0),
+            "page_range": options.get("page_range", ""),
             "output": str(pp_output_dir / "output.md"),
             "raw_output": str(pp_output_dir / "raw_result.json"),
         }
@@ -568,6 +669,7 @@ def run_experiment(
     output_root: Path,
     tools: list[str],
     mineru_options: dict,
+    pp_options: dict,
 ):
     pdf_output_dir = output_root / pdf_path.stem
     pdf_output_dir.mkdir(parents=True, exist_ok=True)
@@ -578,7 +680,7 @@ def run_experiment(
     if "mineru" in tools:
         statuses.append(parse_with_mineru(pdf_path, pdf_output_dir, mineru_options))
     if "pp_structure" in tools:
-        statuses.append(parse_with_pp_structure(pdf_path, pdf_output_dir))
+        statuses.append(parse_with_pp_structure(pdf_path, pdf_output_dir, pp_options))
 
     write_review_template(pdf_output_dir, pdf_path.name, statuses)
     return statuses
@@ -634,6 +736,28 @@ def main():
         default=5,
         help="Seconds between MinerU polling requests.",
     )
+    parser.add_argument(
+        "--pp-mode",
+        default="full",
+        choices=["full", "layout_only", "table_only"],
+        help="PP-Structure mode for local document parsing.",
+    )
+    parser.add_argument(
+        "--pp-dpi-scale",
+        type=float,
+        default=2.0,
+        help="PDF page render scale before PP-Structure OCR/layout parsing.",
+    )
+    parser.add_argument(
+        "--pp-page-range",
+        default="",
+        help='Optional PP-Structure page range, for example "1-3" or "2,4-6".',
+    )
+    parser.add_argument(
+        "--pp-no-sort",
+        action="store_true",
+        help="Keep PP-Structure original block order instead of bbox sorting.",
+    )
 
     args = parser.parse_args()
     input_path = Path(args.input)
@@ -657,10 +781,23 @@ def main():
         "timeout": args.mineru_timeout,
         "poll_interval": args.mineru_poll_interval,
     }
+    pp_options = {
+        "mode": args.pp_mode,
+        "dpi_scale": args.pp_dpi_scale,
+        "page_range": args.pp_page_range,
+        "sort_blocks": not args.pp_no_sort,
+        "show_log": True,
+    }
 
     for pdf_path in pdfs:
         print(f"\n=== Running parser experiment for {pdf_path} ===")
-        statuses = run_experiment(pdf_path, output_root, args.tools, mineru_options)
+        statuses = run_experiment(
+            pdf_path,
+            output_root,
+            args.tools,
+            mineru_options,
+            pp_options,
+        )
         for status in statuses:
             print(
                 f"- {status['tool']}: {status['status']} "
