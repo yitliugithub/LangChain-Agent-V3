@@ -1,0 +1,62 @@
+[
+  {
+    "page": 2,
+    "type": "image",
+    "path": "imgs/img_in_image_box_0_1_786_1126.jpg",
+    "coordinate": [
+      0,
+      1,
+      786,
+      1126
+    ],
+    "score": 0.9820552468299866
+  },
+  {
+    "page": 3,
+    "type": "image",
+    "path": "imgs/img_in_image_box_0_846_514_1075.jpg",
+    "coordinate": [
+      0,
+      846,
+      514,
+      1075
+    ],
+    "score": 0.9282599091529846
+  },
+  {
+    "page": 4,
+    "type": "image",
+    "path": "imgs/img_in_image_box_4_890_372_1087.jpg",
+    "coordinate": [
+      4,
+      890,
+      372,
+      1087
+    ],
+    "score": 0.8162553310394287
+  },
+  {
+    "page": 4,
+    "type": "image",
+    "path": "imgs/img_in_image_box_3_584_378_810.jpg",
+    "coordinate": [
+      3,
+      584,
+      378,
+      810
+    ],
+    "score": 0.785373866558075
+  },
+  {
+    "page": 4,
+    "type": "image",
+    "path": "imgs/img_in_image_box_935_456_1609_1018.jpg",
+    "coordinate": [
+      935,
+      456,
+      1609,
+      1018
+    ],
+    "score": 0.7549808025360107
+  }
+]

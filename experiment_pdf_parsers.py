@@ -617,6 +617,11 @@ def extract_v3_markdown_text(result):
 
 def clean_markdown_for_text_rag(markdown_text: str):
     text = markdown_text
+
+    # Convert HTML tables before stripping other HTML tags. Otherwise table
+    # rows/cells collapse into one unreadable line and become poor RAG evidence.
+    text = convert_html_tables_to_markdown(text)
+
     text = re.sub(
         r'<div[^>]*>\s*<img\s+[^>]*src="([^"]+)"[^>]*>\s*</div>',
         r"\n[Image omitted: \1]\n",
@@ -632,6 +637,92 @@ def clean_markdown_for_text_rag(markdown_text: str):
     text = re.sub(r"<[^>]+>", "", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+def convert_html_tables_to_markdown(text: str):
+    if "<table" not in text.lower():
+        return text
+
+    try:
+        from bs4 import BeautifulSoup
+    except Exception:
+        return re.sub(
+            r"<table\b.*?</table>",
+            html_table_to_markdown_fallback,
+            text,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+
+    soup = BeautifulSoup(text, "html.parser")
+    for table in soup.find_all("table"):
+        rows = []
+        for tr in table.find_all("tr"):
+            cells = tr.find_all(["th", "td"])
+            row = [
+                normalize_table_cell(cell.get_text(" ", strip=True))
+                for cell in cells
+            ]
+            if any(row):
+                rows.append(row)
+
+        table_markdown = rows_to_markdown_table(rows)
+        table.replace_with("\n" + table_markdown + "\n")
+
+    return str(soup)
+
+
+def html_table_to_markdown_fallback(match):
+    table_html = match.group(0)
+    row_htmls = re.findall(
+        r"<tr\b.*?</tr>",
+        table_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    rows = []
+    for row_html in row_htmls:
+        cell_htmls = re.findall(
+            r"<t[dh]\b.*?</t[dh]>",
+            row_html,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        row = [
+            normalize_table_cell(re.sub(r"<[^>]+>", " ", cell_html))
+            for cell_html in cell_htmls
+        ]
+        if any(row):
+            rows.append(row)
+
+    return "\n" + rows_to_markdown_table(rows) + "\n"
+
+
+def normalize_table_cell(value: str):
+    value = re.sub(r"\s+", " ", value)
+    value = value.replace("|", "\\|")
+    return value.strip()
+
+
+def rows_to_markdown_table(rows):
+    if not rows:
+        return ""
+
+    max_columns = max(len(row) for row in rows)
+    normalized_rows = [
+        row + [""] * (max_columns - len(row))
+        for row in rows
+    ]
+
+    header = normalized_rows[0]
+    body = normalized_rows[1:]
+    separator = ["---"] * max_columns
+
+    markdown_lines = [
+        "| " + " | ".join(header) + " |",
+        "| " + " | ".join(separator) + " |",
+    ]
+    for row in body:
+        markdown_lines.append("| " + " | ".join(row) + " |")
+
+    return "\n".join(markdown_lines)
 
 
 def collect_v3_media_metadata(serializable_result, page_number: int):
