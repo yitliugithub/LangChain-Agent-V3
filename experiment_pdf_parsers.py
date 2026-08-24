@@ -649,6 +649,12 @@ def collect_v3_media_metadata(serializable_result, page_number: int):
         )
 
     for block in serializable_result.get("parsing_res_list", []):
+        if not isinstance(block, dict):
+            try:
+                block = dict(block)
+            except Exception:
+                block = {"repr": repr(block)}
+
         label = block.get("label") or block.get("block_label")
         if label in {"table", "chart", "image"}:
             metadata.append(

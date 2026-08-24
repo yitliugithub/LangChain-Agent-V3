@@ -6,7 +6,7 @@ PDF: 2025年品牌营销趋势报告.pdf
 
 | Tool | Status | Seconds | Notes |
 | --- | --- | ---: | --- |
-| pp_structure | success | 418.68 | pdf_parser_experiments/2025年品牌营销趋势报告/pp_structure/output.md |
+| pp_structure | failed | 141.06 | 'LayoutBlock' object has no attribute 'get' |
 
 ## Manual Quality Checklist
 
