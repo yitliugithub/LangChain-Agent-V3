@@ -6,7 +6,7 @@ PDF: 2025年品牌营销趋势报告.pdf
 
 | Tool | Status | Seconds | Notes |
 | --- | --- | ---: | --- |
-| pp_structure | failed | 6.54 | A dependency error occurred during pipeline creation. Please refer to the installation documentation to ensure all required dependencies are installed. |
+| pp_structure | success | 418.68 | pdf_parser_experiments/2025年品牌营销趋势报告/pp_structure/output.md |
 
 ## Manual Quality Checklist
 

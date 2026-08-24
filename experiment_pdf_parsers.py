@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -592,6 +593,76 @@ def _v3_result_to_markdown(page_number: int, results):
     return "\n".join(lines)
 
 
+def save_v3_raw_markdown(result, raw_markdown_dir: Path, page_number: int):
+    if not hasattr(result, "save_to_markdown"):
+        return ""
+
+    page_dir = raw_markdown_dir / f"page_{page_number:04d}"
+    page_dir.mkdir(parents=True, exist_ok=True)
+    result.save_to_markdown(str(page_dir), pretty=True)
+    markdown_files = sorted(page_dir.rglob("*.md"))
+    if markdown_files:
+        return str(markdown_files[0])
+    return ""
+
+
+def extract_v3_markdown_text(result):
+    markdown = getattr(result, "markdown", None)
+    if isinstance(markdown, dict):
+        return markdown.get("markdown_texts", "")
+
+    serializable = _v3_result_to_serializable(result)
+    return serializable.get("markdown_texts", "")
+
+
+def clean_markdown_for_text_rag(markdown_text: str):
+    text = markdown_text
+    text = re.sub(
+        r'<div[^>]*>\s*<img\s+[^>]*src="([^"]+)"[^>]*>\s*</div>',
+        r"\n[Image omitted: \1]\n",
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'<img\s+[^>]*src="([^"]+)"[^>]*>',
+        r"\n[Image omitted: \1]\n",
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r"<[^>]+>", "", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
+def collect_v3_media_metadata(serializable_result, page_number: int):
+    metadata = []
+
+    for item in serializable_result.get("imgs_in_doc", []):
+        metadata.append(
+            {
+                "page": page_number,
+                "type": item.get("label", "image"),
+                "path": item.get("path", ""),
+                "coordinate": item.get("coordinate", []),
+                "score": item.get("score"),
+            }
+        )
+
+    for block in serializable_result.get("parsing_res_list", []):
+        label = block.get("label") or block.get("block_label")
+        if label in {"table", "chart", "image"}:
+            metadata.append(
+                {
+                    "page": page_number,
+                    "type": label,
+                    "bbox": block.get("bbox", []),
+                    "content": block.get("content", ""),
+                }
+            )
+
+    return metadata
+
+
 def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
     tool_name = "pp_structure"
     start = now_seconds()
@@ -620,6 +691,10 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
 
         pp_output_dir = output_dir / tool_name
         pp_output_dir.mkdir(parents=True, exist_ok=True)
+        raw_markdown_dir = pp_output_dir / "raw_markdown"
+        metadata_dir = pp_output_dir / "metadata"
+        raw_markdown_dir.mkdir(parents=True, exist_ok=True)
+        metadata_dir.mkdir(parents=True, exist_ok=True)
 
         markdown_parts = [
             "# PP-Structure Output\n",
@@ -629,6 +704,14 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
             f"Page range: {options.get('page_range', '') or 'all'}\n",
         ]
         raw_results = []
+        cleaned_parts = [
+            "# Cleaned PP-Structure Text\n",
+            f"Source: {pdf_path.name}\n",
+            f"Mode: {options.get('mode', 'full')}\n",
+            f"DPI scale: {options.get('dpi_scale', 2.0)}\n",
+            f"Page range: {options.get('page_range', '') or 'all'}\n",
+        ]
+        media_metadata = []
 
         with tempfile.TemporaryDirectory() as temp_dir:
             image_paths = _pdf_to_page_images(
@@ -656,16 +739,44 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
                         _v3_result_to_serializable(result)
                         for result in page_results
                     ]
+                    raw_markdown_outputs = []
+                    page_text_parts = []
+
+                    for result, serializable in zip(page_results, serializable_result):
+                        raw_markdown_output = save_v3_raw_markdown(
+                            result,
+                            raw_markdown_dir,
+                            page_number,
+                        )
+                        if raw_markdown_output:
+                            raw_markdown_outputs.append(raw_markdown_output)
+
+                        markdown_text = extract_v3_markdown_text(result)
+                        if markdown_text:
+                            page_text_parts.append(markdown_text)
+
+                        media_metadata.extend(
+                            collect_v3_media_metadata(serializable, page_number)
+                        )
+
                     raw_results.append(
                         {
                             "page": page_number,
                             "api_version": api_version,
+                            "raw_markdown_outputs": raw_markdown_outputs,
                             "result": serializable_result,
                         }
                     )
                     markdown_parts.append(
                         _v3_result_to_markdown(page_number, page_results)
                     )
+                    if page_text_parts:
+                        cleaned_parts.append(f"\n\n## Page {page_number}\n")
+                        cleaned_parts.append(
+                            clean_markdown_for_text_rag(
+                                "\n\n".join(page_text_parts)
+                            )
+                        )
                 else:
                     image = cv2.imread(str(image_path))
                     result = engine(image)
@@ -689,10 +800,24 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
                     markdown_parts.append(
                         _ppstructure_result_to_markdown(page_number, serializable_result)
                     )
+                    cleaned_parts.append(f"\n\n## Page {page_number}\n")
+                    cleaned_parts.append(
+                        clean_markdown_for_text_rag(
+                            _ppstructure_result_to_markdown(
+                                page_number,
+                                serializable_result,
+                            )
+                        )
+                    )
 
         write_text(pp_output_dir / "output.md", "\n".join(markdown_parts))
+        write_text(pp_output_dir / "cleaned_text.md", "\n".join(cleaned_parts))
         (pp_output_dir / "raw_result.json").write_text(
             json.dumps(raw_results, ensure_ascii=False, indent=2, default=str),
+            encoding="utf-8",
+        )
+        (metadata_dir / "image_table_metadata.json").write_text(
+            json.dumps(media_metadata, ensure_ascii=False, indent=2, default=str),
             encoding="utf-8",
         )
 
@@ -705,7 +830,10 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
             "dpi_scale": options.get("dpi_scale", 2.0),
             "page_range": options.get("page_range", ""),
             "output": str(pp_output_dir / "output.md"),
+            "cleaned_text": str(pp_output_dir / "cleaned_text.md"),
             "raw_output": str(pp_output_dir / "raw_result.json"),
+            "raw_markdown_dir": str(raw_markdown_dir),
+            "media_metadata": str(metadata_dir / "image_table_metadata.json"),
         }
     except Exception as exc:
         status = {

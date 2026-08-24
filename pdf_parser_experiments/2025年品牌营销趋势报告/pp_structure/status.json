@@ -1,6 +1,11 @@
 {
   "tool": "pp_structure",
-  "status": "failed",
-  "seconds": 6.54,
-  "error": "A dependency error occurred during pipeline creation. Please refer to the installation documentation to ensure all required dependencies are installed."
+  "status": "success",
+  "seconds": 418.68,
+  "api_version": "v3",
+  "mode": "full",
+  "dpi_scale": 2.0,
+  "page_range": "2-5",
+  "output": "pdf_parser_experiments/2025年品牌营销趋势报告/pp_structure/output.md",
+  "raw_output": "pdf_parser_experiments/2025年品牌营销趋势报告/pp_structure/raw_result.json"
 }
