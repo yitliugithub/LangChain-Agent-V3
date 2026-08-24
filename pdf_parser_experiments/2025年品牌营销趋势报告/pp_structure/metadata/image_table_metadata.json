@@ -2,61 +2,73 @@
   {
     "page": 2,
     "type": "image",
-    "path": "imgs/img_in_image_box_0_1_786_1126.jpg",
+    "path": "imgs/img_in_image_box_0_2_985_1409.jpg",
     "coordinate": [
       0,
-      1,
-      786,
-      1126
+      2,
+      985,
+      1409
     ],
-    "score": 0.9820552468299866
+    "score": 0.9818645715713501
   },
   {
     "page": 3,
     "type": "image",
-    "path": "imgs/img_in_image_box_0_846_514_1075.jpg",
+    "path": "imgs/img_in_image_box_1_1050_654_1336.jpg",
     "coordinate": [
-      0,
-      846,
-      514,
-      1075
+      1,
+      1050,
+      654,
+      1336
     ],
-    "score": 0.9282599091529846
+    "score": 0.9384458661079407
   },
   {
     "page": 4,
     "type": "image",
-    "path": "imgs/img_in_image_box_4_890_372_1087.jpg",
+    "path": "imgs/img_in_image_box_5_1112_466_1355.jpg",
+    "coordinate": [
+      5,
+      1112,
+      466,
+      1355
+    ],
+    "score": 0.799974262714386
+  },
+  {
+    "page": 4,
+    "type": "image",
+    "path": "imgs/img_in_image_box_4_732_469_1011.jpg",
     "coordinate": [
       4,
-      890,
-      372,
-      1087
+      732,
+      469,
+      1011
     ],
-    "score": 0.8162553310394287
+    "score": 0.7812294363975525
   },
   {
     "page": 4,
     "type": "image",
-    "path": "imgs/img_in_image_box_3_584_378_810.jpg",
+    "path": "imgs/img_in_image_box_1164_570_2012_1272.jpg",
     "coordinate": [
-      3,
-      584,
-      378,
-      810
+      1164,
+      570,
+      2012,
+      1272
     ],
-    "score": 0.785373866558075
+    "score": 0.7022971510887146
   },
   {
-    "page": 4,
+    "page": 5,
     "type": "image",
-    "path": "imgs/img_in_image_box_935_456_1609_1018.jpg",
+    "path": "imgs/img_in_image_box_1086_203_2096_967.jpg",
     "coordinate": [
-      935,
-      456,
-      1609,
-      1018
+      1086,
+      203,
+      2096,
+      967
     ],
-    "score": 0.7549808025360107
+    "score": 0.5693625807762146
   }
 ]

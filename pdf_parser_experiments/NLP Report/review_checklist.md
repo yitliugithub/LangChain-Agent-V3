@@ -12,16 +12,16 @@ PDF: NLP Report.pdf
 
 Score each item from 1 to 5.
 
-| Criterion | pymupdf4llm | MinerU | PP-Structure | Notes |
-| --- |------------:| ---: | ---: | --- |
-| Reading order is correct |           0 |  |  |  |
-| Double-column layout is handled |           0 |  |  |  |
-| Headings are preserved |           5 |  |  |  |
-| Paragraph blank lines are preserved |           5 |  |  |  |
-| Tables are readable |           5 |  |  |  |
-| Figures/captions are represented |           / |  |  |  |
-| No obvious header/footer noise |           / |  |  |  |
-| Output is suitable for chunking |           0 |  |  |  |
+| Criterion | pymupdf4llm | PP-Structure | Notes |
+| --- |------------:| ---: | --- |
+| Reading order is correct |           0 |  |  |
+| Double-column layout is handled |           0 |  |  |
+| Headings are preserved |           5 |  |  |
+| Paragraph blank lines are preserved |           5 |  |  |
+| Tables are readable |           5 |  |  |
+| Figures/captions are represented |           / |  |  |
+| No obvious header/footer noise |           / |  |  |
+| Output is suitable for chunking |           0 |  |  |
 
 ## Decision
 
