@@ -6,22 +6,22 @@ PDF: 2025年品牌营销趋势报告.pdf
 
 | Tool | Status | Seconds | Notes |
 | --- | --- | ---: | --- |
-| pymupdf4llm | success | 4.53 | pdf_parser_experiments/2025年品牌营销趋势报告/pymupdf4llm/output.md |
+| pp_structure | failed | 6.54 | A dependency error occurred during pipeline creation. Please refer to the installation documentation to ensure all required dependencies are installed. |
 
 ## Manual Quality Checklist
 
 Score each item from 1 to 5.
 
 | Criterion | pymupdf4llm | MinerU | PP-Structure | Notes |
-| --- |------------:| ---: | ---: | --- |
-| Reading order is correct |           5 |  |  |  |
-| Double-column layout is handled |           / |  |  |  |
-| Headings are preserved |           4 |  |  |  |
-| Paragraph blank lines are preserved |           0 |  |  |  |
-| Tables are readable |           5 |  |  |  |
-| Figures/captions are represented |           0 |  |  |  |
-| No obvious header/footer noise |           0 |  |  |  |
-| Output is suitable for chunking |           0 |  |  |  |
+| --- | ---: | ---: | ---: | --- |
+| Reading order is correct |  |  |  |  |
+| Double-column layout is handled |  |  |  |  |
+| Headings are preserved |  |  |  |  |
+| Paragraph blank lines are preserved |  |  |  |  |
+| Tables are readable |  |  |  |  |
+| Figures/captions are represented |  |  |  |  |
+| No obvious header/footer noise |  |  |  |  |
+| Output is suitable for chunking |  |  |  |  |
 
 ## Decision
 

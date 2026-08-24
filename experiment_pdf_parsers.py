@@ -450,30 +450,57 @@ def _pdf_to_page_images(
 
 
 def create_pp_structure_engine(options: dict):
-    from paddleocr import PPStructure
+    import paddleocr
 
     mode = options.get("mode", "full")
     show_log = options.get("show_log", True)
 
-    if mode == "layout_only":
-        return PPStructure(
-            show_log=show_log,
-            recovery=False,
-            return_ocr_result_in_table=False,
-        )
-    if mode == "table_only":
-        return PPStructure(
-            show_log=show_log,
-            layout=False,
-            table=True,
-            ocr=True,
-            recovery=False,
+    if hasattr(paddleocr, "PPStructureV3"):
+        return (
+            "v3",
+            paddleocr.PPStructureV3(
+                use_table_recognition=mode in {"full", "table_only"},
+                use_formula_recognition=False,
+                use_chart_recognition=False,
+                use_region_detection=False,
+                lang="ch",
+            ),
         )
 
-    return PPStructure(
-        show_log=show_log,
-        recovery=False,
-        return_ocr_result_in_table=True,
+    if not hasattr(paddleocr, "PPStructure"):
+        raise ImportError(
+            "Neither PPStructure nor PPStructureV3 is available in paddleocr."
+        )
+
+    PPStructure = paddleocr.PPStructure
+    if mode == "layout_only":
+        return (
+            "legacy",
+            PPStructure(
+                show_log=show_log,
+                recovery=False,
+                return_ocr_result_in_table=False,
+            ),
+        )
+    if mode == "table_only":
+        return (
+            "legacy",
+            PPStructure(
+                show_log=show_log,
+                layout=False,
+                table=True,
+                ocr=True,
+                recovery=False,
+            ),
+        )
+
+    return (
+        "legacy",
+        PPStructure(
+            show_log=show_log,
+            recovery=False,
+            return_ocr_result_in_table=True,
+        ),
     )
 
 
@@ -523,12 +550,58 @@ def _ppstructure_result_to_markdown(page_number: int, result):
     return "\n".join(lines)
 
 
+def _v3_result_to_serializable(result):
+    if isinstance(result, dict):
+        return result
+
+    try:
+        return dict(result)
+    except Exception:
+        pass
+
+    json_attr = getattr(result, "json", None)
+    if isinstance(json_attr, dict):
+        return json_attr
+
+    return {"repr": repr(result)}
+
+
+def _v3_result_to_markdown(page_number: int, results):
+    lines = [f"\n\n## Page {page_number}\n"]
+
+    for result_index, result in enumerate(results, start=1):
+        markdown = getattr(result, "markdown", None)
+        if isinstance(markdown, dict):
+            markdown_text = markdown.get("markdown_texts", "")
+            if markdown_text:
+                lines.append(f"\n### Result {result_index}: markdown\n")
+                lines.append(markdown_text)
+                continue
+
+        serializable = _v3_result_to_serializable(result)
+        markdown_text = serializable.get("markdown_texts", "")
+        if markdown_text:
+            lines.append(f"\n### Result {result_index}: markdown\n")
+            lines.append(markdown_text)
+        else:
+            lines.append(f"\n### Result {result_index}: raw\n")
+            lines.append("```json")
+            lines.append(json.dumps(serializable, ensure_ascii=False, indent=2, default=str))
+            lines.append("```")
+
+    return "\n".join(lines)
+
+
 def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
     tool_name = "pp_structure"
     start = now_seconds()
 
     try:
-        from paddleocr import PPStructure
+        import paddleocr
+        if not (hasattr(paddleocr, "PPStructure") or hasattr(paddleocr, "PPStructureV3")):
+            raise ImportError(
+                "paddleocr is installed, but PPStructure/PPStructureV3 is not exported."
+            )
     except Exception as exc:
         status = {
             "tool": tool_name,
@@ -564,31 +637,58 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
                 dpi_scale=options.get("dpi_scale", 2.0),
                 page_range=options.get("page_range", ""),
             )
-            engine = create_pp_structure_engine(options)
+            api_version, engine = create_pp_structure_engine(options)
 
             for page_number, image_path in image_paths:
                 print(f"[PP-Structure] parsing page {page_number}: {image_path.name}")
-                image = cv2.imread(str(image_path))
-                result = engine(image)
-                serializable_result = []
+                if api_version == "v3":
+                    page_results = list(
+                        engine.predict(
+                            str(image_path),
+                            use_table_recognition=options.get("mode", "full")
+                            in {"full", "table_only"},
+                            use_formula_recognition=False,
+                            use_chart_recognition=False,
+                            use_region_detection=False,
+                        )
+                    )
+                    serializable_result = [
+                        _v3_result_to_serializable(result)
+                        for result in page_results
+                    ]
+                    raw_results.append(
+                        {
+                            "page": page_number,
+                            "api_version": api_version,
+                            "result": serializable_result,
+                        }
+                    )
+                    markdown_parts.append(
+                        _v3_result_to_markdown(page_number, page_results)
+                    )
+                else:
+                    image = cv2.imread(str(image_path))
+                    result = engine(image)
+                    serializable_result = []
 
-                for block in result:
-                    clean_block = dict(block)
-                    clean_block.pop("img", None)
-                    serializable_result.append(clean_block)
+                    for block in result:
+                        clean_block = dict(block)
+                        clean_block.pop("img", None)
+                        serializable_result.append(clean_block)
 
-                if options.get("sort_blocks", True):
-                    serializable_result = sort_blocks_for_reading(serializable_result)
+                    if options.get("sort_blocks", True):
+                        serializable_result = sort_blocks_for_reading(serializable_result)
 
-                raw_results.append(
-                    {
-                        "page": page_number,
-                        "result": serializable_result,
-                    }
-                )
-                markdown_parts.append(
-                    _ppstructure_result_to_markdown(page_number, serializable_result)
-                )
+                    raw_results.append(
+                        {
+                            "page": page_number,
+                            "api_version": api_version,
+                            "result": serializable_result,
+                        }
+                    )
+                    markdown_parts.append(
+                        _ppstructure_result_to_markdown(page_number, serializable_result)
+                    )
 
         write_text(pp_output_dir / "output.md", "\n".join(markdown_parts))
         (pp_output_dir / "raw_result.json").write_text(
@@ -600,6 +700,7 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
             "tool": tool_name,
             "status": "success",
             "seconds": round(now_seconds() - start, 2),
+            "api_version": api_version,
             "mode": options.get("mode", "full"),
             "dpi_scale": options.get("dpi_scale", 2.0),
             "page_range": options.get("page_range", ""),
