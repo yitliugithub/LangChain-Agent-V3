@@ -128,6 +128,10 @@ def collect_markdown_files(output_dir: Path):
 def clean_markdown_for_text_rag(markdown_text: str):
     text = markdown_text
 
+    # Magic-PDF often keeps recognized tables as HTML. Convert tables before
+    # stripping tags so RAG receives row/column structure instead of flat text.
+    text = convert_html_tables_to_markdown(text)
+
     text = re.sub(
         r'<div[^>]*>\s*<img\s+[^>]*src="([^"]+)"[^>]*>\s*</div>',
         r"\n[Image omitted: \1]\n",
@@ -144,6 +148,89 @@ def clean_markdown_for_text_rag(markdown_text: str):
     text = re.sub(r"[ \t]+\n", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+def convert_html_tables_to_markdown(text: str):
+    if "<table" not in text.lower():
+        return text
+
+    try:
+        from bs4 import BeautifulSoup
+    except Exception:
+        return re.sub(
+            r"<table\b.*?</table>",
+            html_table_to_markdown_fallback,
+            text,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+
+    soup = BeautifulSoup(text, "html.parser")
+    for table in soup.find_all("table"):
+        rows = []
+        for tr in table.find_all("tr"):
+            cells = tr.find_all(["th", "td"])
+            row = [
+                normalize_table_cell(cell.get_text(" ", strip=True))
+                for cell in cells
+            ]
+            if any(row):
+                rows.append(row)
+
+        table.replace_with("\n" + rows_to_markdown_table(rows) + "\n")
+
+    return str(soup)
+
+
+def html_table_to_markdown_fallback(match):
+    table_html = match.group(0)
+    row_htmls = re.findall(
+        r"<tr\b.*?</tr>",
+        table_html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    rows = []
+    for row_html in row_htmls:
+        cell_htmls = re.findall(
+            r"<t[dh]\b.*?</t[dh]>",
+            row_html,
+            flags=re.IGNORECASE | re.DOTALL,
+        )
+        row = [
+            normalize_table_cell(re.sub(r"<[^>]+>", " ", cell_html))
+            for cell_html in cell_htmls
+        ]
+        if any(row):
+            rows.append(row)
+
+    return "\n" + rows_to_markdown_table(rows) + "\n"
+
+
+def normalize_table_cell(value: str):
+    value = re.sub(r"\s+", " ", value)
+    value = value.replace("|", "\\|")
+    return value.strip()
+
+
+def rows_to_markdown_table(rows):
+    if not rows:
+        return ""
+
+    max_columns = max(len(row) for row in rows)
+    normalized_rows = [
+        row + [""] * (max_columns - len(row))
+        for row in rows
+    ]
+    header = normalized_rows[0]
+    body = normalized_rows[1:]
+
+    markdown_lines = [
+        "| " + " | ".join(header) + " |",
+        "| " + " | ".join(["---"] * max_columns) + " |",
+    ]
+    for row in body:
+        markdown_lines.append("| " + " | ".join(row) + " |")
+
+    return "\n".join(markdown_lines)
 
 
 def build_cleaned_text(pdf_path: Path, raw_output_dir: Path, cleaned_output_path: Path):
@@ -176,6 +263,7 @@ def run_magic_pdf_experiment(
     method: str,
     lang: str,
     config_path: Path,
+    rebuild_only: bool,
 ):
     start = now_seconds()
     pdf_path = pdf_path.expanduser().resolve()
@@ -205,6 +293,27 @@ def run_magic_pdf_experiment(
     write_json(status_path, status)
 
     try:
+        if rebuild_only:
+            markdown_files = build_cleaned_text(
+                pdf_path,
+                raw_output_dir,
+                cleaned_output_path,
+            )
+            status = {
+                "tool": TOOL_NAME,
+                "status": "success" if markdown_files else "failed",
+                "seconds": round(now_seconds() - start, 2),
+                "mode": "rebuild_only",
+                "input": str(pdf_path),
+                "raw_output_dir": str(raw_output_dir),
+                "cleaned_text": str(cleaned_output_path),
+                "markdown_files_found": [str(path) for path in markdown_files],
+            }
+            if not markdown_files:
+                status["error"] = "No Markdown output was found under raw_output."
+            write_json(status_path, status)
+            return status
+
         command = resolve_command(preferred_command)
         cmd = build_command(
             command,
@@ -340,6 +449,11 @@ def main():
             "Default: ~/magic-pdf.json"
         ),
     )
+    parser.add_argument(
+        "--rebuild-cleaned-only",
+        action="store_true",
+        help="Rebuild cleaned_text.md from existing raw_output without running Magic-PDF.",
+    )
 
     args = parser.parse_args()
     status = run_magic_pdf_experiment(
@@ -350,6 +464,7 @@ def main():
         method=args.method,
         lang=args.lang,
         config_path=Path(args.config).expanduser(),
+        rebuild_only=args.rebuild_cleaned_only,
     )
 
     print(json.dumps(status, ensure_ascii=False, indent=2))

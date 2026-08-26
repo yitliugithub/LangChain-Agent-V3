@@ -1,0 +1,12 @@
+{
+  "tool": "magic_pdf",
+  "status": "success",
+  "seconds": 0.0,
+  "mode": "rebuild_only",
+  "input": "/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2025年品牌营销趋势报告.pdf",
+  "raw_output_dir": "pdf_parser_experiments/2025年品牌营销趋势报告/magic_pdf/raw_output",
+  "cleaned_text": "pdf_parser_experiments/2025年品牌营销趋势报告/magic_pdf/cleaned_text.md",
+  "markdown_files_found": [
+    "pdf_parser_experiments/2025年品牌营销趋势报告/magic_pdf/raw_output/2025年品牌营销趋势报告/auto/2025年品牌营销趋势报告.md"
+  ]
+}

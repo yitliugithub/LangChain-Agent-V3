@@ -5,8 +5,14 @@ Config: /Users/liuyiting/magic-pdf.json
 
 Config snapshot: /Users/liuyiting/PycharmProjects/pythonProject2/pdf_parser_experiments/2024年KOL发展年报/magic_pdf/magic-pdf.config.snapshot.json
 
-2026-08-26 12:38:42.771 | WARNING  | magic_pdf.libs.config_reader:get_latex_delimiter_config:132 - 'latex-delimiter-config' not found in /Users/liuyiting/magic-pdf.json, use 'None' as default
-2026-08-26 12:38:44.649 | INFO     | magic_pdf.data.dataset:__init__:157 - lang: ch
+2026-08-26 12:44:30.513 | WARNING  | magic_pdf.libs.config_reader:get_latex_delimiter_config:132 - 'latex-delimiter-config' not found in /Users/liuyiting/magic-pdf.json, use 'None' as default
+2026-08-26 12:44:32.356 | INFO     | magic_pdf.data.dataset:__init__:157 - lang: ch
+Cannot set gray non-stroke color because /'P2752' is an invalid float value
+Cannot set gray non-stroke color because /'P2777' is an invalid float value
+Cannot set gray non-stroke color because /'P2794' is an invalid float value
+Cannot set gray non-stroke color because /'P2796' is an invalid float value
+Cannot set gray non-stroke color because /'P2798' is an invalid float value
+Cannot set gray non-stroke color because /'P702' is an invalid float value
 Cannot set gray non-stroke color because /'P2008' is an invalid float value
 Cannot set gray non-stroke color because /'P2029' is an invalid float value
 Cannot set gray non-stroke color because /'P2050' is an invalid float value
@@ -16,213 +22,71 @@ Cannot set gray non-stroke color because /'P2113' is an invalid float value
 Cannot set gray non-stroke color because /'P2134' is an invalid float value
 Cannot set gray non-stroke color because /'P2155' is an invalid float value
 Cannot set gray non-stroke color because /'P2178' is an invalid float value
-Cannot set gray non-stroke color because /'P887' is an invalid float value
-Cannot set gray non-stroke color because /'P908' is an invalid float value
-Cannot set gray non-stroke color because /'P932' is an invalid float value
-Cannot set gray non-stroke color because /'P954' is an invalid float value
-Cannot set gray non-stroke color because /'P975' is an invalid float value
+Cannot set gray non-stroke color because /'P2439' is an invalid float value
+Cannot set gray non-stroke color because /'P2467' is an invalid float value
+Cannot set gray non-stroke color because /'P2489' is an invalid float value
+Cannot set gray non-stroke color because /'P2512' is an invalid float value
+Cannot set gray non-stroke color because /'P2535' is an invalid float value
+Cannot set gray non-stroke color because /'P2556' is an invalid float value
+Cannot set gray non-stroke color because /'P2577' is an invalid float value
+Cannot set gray non-stroke color because /'P2598' is an invalid float value
+Cannot set gray non-stroke color because /'P2619' is an invalid float value
+Cannot set gray non-stroke color because /'P2640' is an invalid float value
+Cannot set gray non-stroke color because /'P2655' is an invalid float value
+Cannot set gray non-stroke color because /'P2657' is an invalid float value
 Cannot set gray non-stroke color because /'P802' is an invalid float value
 Cannot set gray non-stroke color because /'P827' is an invalid float value
 Cannot set gray non-stroke color because /'P854' is an invalid float value
-Cannot set gray non-stroke color because /'P743' is an invalid float value
-Cannot set gray non-stroke color because /'P751' is an invalid float value
-Cannot set gray non-stroke color because /'P759' is an invalid float value
-Cannot set gray non-stroke color because /'P775' is an invalid float value
-Cannot set gray non-stroke color because /'P251' is an invalid float value
-Cannot set gray non-stroke color because /'P276' is an invalid float value
-Cannot set gray non-stroke color because /'P301' is an invalid float value
-Cannot set gray non-stroke color because /'P326' is an invalid float value
-Cannot set gray non-stroke color because /'P351' is an invalid float value
-Cannot set gray non-stroke color because /'P372' is an invalid float value
-Cannot set gray non-stroke color because /'P389' is an invalid float value
-Cannot set gray non-stroke color because /'P406' is an invalid float value
-Cannot set gray non-stroke color because /'P423' is an invalid float value
-Cannot set gray non-stroke color because /'P440' is an invalid float value
-Cannot set gray non-stroke color because /'P543' is an invalid float value
-Cannot set gray non-stroke color because /'P568' is an invalid float value
-Cannot set gray non-stroke color because /'P593' is an invalid float value
-Cannot set gray non-stroke color because /'P618' is an invalid float value
-Cannot set gray non-stroke color because /'P643' is an invalid float value
-Cannot set gray non-stroke color because /'P668' is an invalid float value
-2026-08-26 12:38:48.563 | INFO     | magic_pdf.libs.pdf_check:detect_invalid_chars:67 - cid_count: 0, text_len: 4026, cid_chars_radio: 0.0
-2026-08-26 12:38:54.989 | INFO     | magic_pdf.model.doc_analyze_by_custom_model:doc_analyze:162 - Batch 1/1: 47 pages/47 pages
-2026-08-26 12:38:54.991 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:68 - DocAnalysis init, this may take some times, layout_model: doclayout_yolo, apply_formula: False, apply_ocr: True, apply_table: True, table_model: rapid_table, lang: None
-2026-08-26 12:38:54.991 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:82 - using device: cpu
-2026-08-26 12:38:54.991 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:86 - using models_dir: /Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6ecc87ec9/models
-2026-08-26 12:38:55.076 | WARNING  | magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.pytorch_paddle:__init__:59 - The current device in use is CPU. To ensure the speed of parsing, the language is automatically switched to ch_lite.
-2026-08-26 12:38:57.670 | ERROR    | magic_pdf.tools.cli:parse_doc:134 - [Errno 2] No such file or directory: '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6ecc87ec9/models/OCR/paddleocr_torch/ch_PP-OCRv3_det_infer.pth'
-Traceback (most recent call last):
-
-  File "/opt/miniconda3/envs/mineru_magic/bin/magic-pdf", line 6, in <module>
-    sys.exit(cli())
-    │   │    └ <Command cli>
-    │   └ <built-in function exit>
-    └ <module 'sys' (built-in)>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 1569, in __call__
-    return self.main(*args, **kwargs)
-           │    │     │       └ {}
-           │    │     └ ()
-           │    └ <function Command.main at 0x100ba8b80>
-           └ <Command cli>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 1490, in main
-    rv = self.invoke(ctx)
-         │    │      └ <click.core.Context object at 0x1004ebc10>
-         │    └ <function Command.invoke at 0x100ba8a60>
-         └ <Command cli>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 1353, in invoke
-    return ctx.invoke(self.callback, **ctx.params)
-           │   │      │    │           │   └ {'path': '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf', 'output_dir': 'pdf_parser_experiments/2...
-           │   │      │    │           └ <click.core.Context object at 0x1004ebc10>
-           │   │      │    └ <function cli at 0x11f51b760>
-           │   │      └ <Command cli>
-           │   └ <function Context.invoke at 0x100b97d90>
-           └ <click.core.Context object at 0x1004ebc10>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 907, in invoke
-    return callback(*args, **kwargs)
-           │         │       └ {'path': '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf', 'output_dir': 'pdf_parser_experiments/2...
-           │         └ ()
-           └ <function cli at 0x11f51b760>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/cli.py", line 155, in cli
-    parse_doc(Path(path))
-    │         │    └ '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf'
-    │         └ <class 'pathlib.Path'>
-    └ <function cli.<locals>.parse_doc at 0x11f51b2e0>
-> File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/cli.py", line 121, in parse_doc
-    do_parse(
-    └ <function do_parse at 0x11f51acb0>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/common.py", line 284, in do_parse
-    _do_parse(output_dir, pdf_file_name, pdf_bytes_or_dataset, model_list, parse_method, debug_able, start_page_id=start_page_id, end_page_id=end_page_id, lang=lang, layout_model=layout_model, formula_enable=formula_enable, table_enable=table_enable,  f_draw_span_bbox=f_draw_span_bbox, f_draw_layout_bbox=f_draw_layout_bbox, f_dump_md=f_dump_md, f_dump_middle_json=f_dump_middle_json, f_dump_model_json=f_dump_model_json, f_dump_orig_pdf=f_dump_orig_pdf, f_dump_content_list=f_dump_content_list, f_make_md_mode=f_make_md_mode, f_draw_model_bbox=f_draw_model_bbox, f_draw_line_sort_bbox=f_draw_line_sort_bbox, f_draw_char_bbox=f_draw_char_bbox)
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 │                                        │                                       └ False
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 │                                        └ False
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 └ False
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   └ 'mm_markdown'
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               └ True
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            └ None
-    │         │           │              │                     │           │             │                         │                          │                 │                  │                            └ None
-    │         │           │              │                     │           │             │                         │                          │                 │                  └ None
-    │         │           │              │                     │           │             │                         │                          │                 └ 'ch'
-    │         │           │              │                     │           │             │                         │                          └ None
-    │         │           │              │                     │           │             │                         └ 0
-    │         │           │              │                     │           │             └ False
-    │         │           │              │                     │           └ 'auto'
-    │         │           │              │                     └ []
-    │         │           │              └ b'%PDF-1.7\n%\xa1\xb3\xc5\xd7\n1 0 obj\r\n<</Type/Catalog/Pages 2 0 R /Lang(zh)/StructTreeRoot 2847 0 R /Outlines 2799 0 R /M...
-    │         │           └ '2024年KOL发展年报'
-    │         └ 'pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output'
-    └ <function _do_parse at 0x11f51ac20>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/common.py", line 119, in _do_parse
-    infer_result = ds.apply(
-                   │  └ <function PymuDocDataset.apply at 0x106980280>
-                   └ <magic_pdf.data.dataset.PymuDocDataset object at 0x11f4f7970>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/data/dataset.py", line 214, in apply
-    return proc(self, *args, **kwargs)
-           │    │      │       └ {'ocr': False, 'lang': 'ch', 'layout_model': None, 'formula_enable': None, 'table_enable': None}
-           │    │      └ ()
-           │    └ <magic_pdf.data.dataset.PymuDocDataset object at 0x11f4f7970>
-           └ <function doc_analyze at 0x11f51a9e0>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 163, in doc_analyze
-    result = may_batch_image_analyze(batch_image, ocr, show_log,layout_model, formula_enable, table_enable)
-             │                       │            │    │        │             │               └ None
-             │                       │            │    │        │             └ None
-             │                       │            │    │        └ None
-             │                       │            │    └ False
-             │                       │            └ False
-             │                       └ [(array([[[ 22,  23,  28],
-             │                                 [ 22,  23,  28],
-             │                                 [ 22,  23,  28],
-             │                                 ...,
-             │                                 [106,  82,  99],
-             │                                 [1...
-             └ <function may_batch_image_analyze at 0x11f51ab00>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 288, in may_batch_image_analyze
-    results = batch_model(images_with_extra_info)
-              │           └ [(array([[[ 22,  23,  28],
-              │                     [ 22,  23,  28],
-              │                     [ 22,  23,  28],
-              │                     ...,
-              │                     [106,  82,  99],
-              │                     [1...
-              └ <magic_pdf.model.batch_analyze.BatchAnalyze object at 0x144760070>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/batch_analyze.py", line 33, in __call__
-    self.model = self.model_manager.get_model(
-    │            │    │             └ <function ModelSingleton.get_model at 0x11f51a950>
-    │            │    └ <magic_pdf.model.doc_analyze_by_custom_model.ModelSingleton object at 0x1447602b0>
-    │            └ <magic_pdf.model.batch_analyze.BatchAnalyze object at 0x144760070>
-    └ <magic_pdf.model.batch_analyze.BatchAnalyze object at 0x144760070>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 46, in get_model
-    self._models[key] = custom_model_init(
-    │    │       │      └ <function custom_model_init at 0x1184fee60>
-    │    │       └ (True, False, None, None, None, None)
-    │    └ {}
-    └ <magic_pdf.model.doc_analyze_by_custom_model.ModelSingleton object at 0x1447602b0>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 111, in custom_model_init
-    custom_model = CustomPEKModel(**model_input)
-                   │                └ {'ocr': True, 'show_log': False, 'models_dir': '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-...
-                   └ <class 'magic_pdf.model.pdf_extract_kit.CustomPEKModel'>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/pdf_extract_kit.py", line 145, in __init__
-    self.ocr_model = atom_model_manager.get_atom_model(
-    │                │                  └ <function AtomModelSingleton.get_atom_model at 0x144730af0>
-    │                └ <magic_pdf.model.sub_modules.model_init.AtomModelSingleton object at 0x144b887f0>
-    └ <magic_pdf.model.pdf_extract_kit.CustomPEKModel object at 0x144760c10>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/model_init.py", line 150, in get_atom_model
-    self._models[key] = atom_model_init(model_name=atom_model_name, **kwargs)
-    │    │       │      │                          │                  └ {'ocr_show_log': False, 'det_db_box_thresh': 0.3, 'lang': None}
-    │    │       │      │                          └ 'ocr'
-    │    │       │      └ <function atom_model_init at 0x1447309d0>
-    │    │       └ ('ocr', None)
-    │    └ {('layout', 'doclayout_yolo'): <magic_pdf.model.sub_modules.layout.doclayout_yolo.DocLayoutYOLO.DocLayoutYOLOModel object at ...
-    └ <magic_pdf.model.sub_modules.model_init.AtomModelSingleton object at 0x144b887f0>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/model_init.py", line 182, in atom_model_init
-    atom_model = ocr_model_init(
-                 └ <function ocr_model_init at 0x144730940>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/model_init.py", line 116, in ocr_model_init
-    model = PytorchPaddleOCR(
-            └ <class 'magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.pytorch_paddle.PytorchPaddleOCR'>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/ocr/paddleocr2pytorch/pytorch_paddle.py", line 89, in __init__
-    super().__init__(args)
-                     └ Namespace(use_gpu=False, det=True, rec=True, device='cpu', gpu_mem=500, warmup=False, image_dir=None, det_algorithm='DB', det...
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/ocr/paddleocr2pytorch/tools/infer/predict_system.py", line 12, in __init__
-    self.text_detector = predict_det.TextDetector(args, **kwargs)
-    │                    │           │            │       └ {}
-    │                    │           │            └ Namespace(use_gpu=False, det=True, rec=True, device='cpu', gpu_mem=500, warmup=False, image_dir=None, det_algorithm='DB', det...
-    │                    │           └ <class 'magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.tools.infer.predict_det.TextDetector'>
-    │                    └ <module 'magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.tools.infer.predict_det' from '/opt/miniconda3/envs/mineru_magic/l...
-    └ <magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.pytorch_paddle.PytorchPaddleOCR object at 0x14574ffa0>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/ocr/paddleocr2pytorch/tools/infer/predict_det.py", line 116, in __init__
-    self.load_pytorch_weights(self.weights_path)
-    │    │                    │    └ '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6e...
-    │    │                    └ <magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.tools.infer.predict_det.TextDetector object at 0x145720070>
-    │    └ <function BaseOCRV20.load_pytorch_weights at 0x14411beb0>
-    └ <magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.tools.infer.predict_det.TextDetector object at 0x145720070>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/ocr/paddleocr2pytorch/pytorchocr/base_ocr_v20.py", line 33, in load_pytorch_weights
-    self.net.load_state_dict(torch.load(weights_path, weights_only=True))
-    │    │   │               │     │    └ '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6e...
-    │    │   │               │     └ <function load at 0x119f9a4d0>
-    │    │   │               └ <module 'torch' from '/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/torch/__init__.py'>
-    │    │   └ <function Module.load_state_dict at 0x11af7d6c0>
-    │    └ BaseModel(
-    │        (backbone): MobileNetV3(
-    │          (conv): ConvBNLayer(
-    │            (conv): Conv2d(3, 8, kernel_size=(3, 3), stride=(2, 2), ...
-    └ <magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.tools.infer.predict_det.TextDetector object at 0x145720070>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/torch/serialization.py", line 1561, in load
-    with _open_file_like(f, "rb") as opened_file:
-         │               └ '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6e...
-         └ <function _open_file_like at 0x119f99870>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/torch/serialization.py", line 795, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-           │          │               └ 'rb'
-           │          └ '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6e...
-           └ <class 'torch.serialization._open_file'>
-  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/torch/serialization.py", line 776, in __init__
-    super().__init__(open(name, mode))  # noqa: SIM115
-                          │     └ 'rb'
-                          └ '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6e...
-
-FileNotFoundError: [Errno 2] No such file or directory: '/Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6ecc87ec9/models/OCR/paddleocr_torch/ch_PP-OCRv3_det_infer.pth'
+Cannot set gray non-stroke color because /'P2661' is an invalid float value
+Cannot set gray non-stroke color because /'P2663' is an invalid float value
+Cannot set gray non-stroke color because /'P2673' is an invalid float value
+Cannot set gray non-stroke color because /'P2690' is an invalid float value
+Cannot set gray non-stroke color because /'P2700' is an invalid float value
+Cannot set gray non-stroke color because /'P2725' is an invalid float value
+Cannot set gray non-stroke color because /'P1169' is an invalid float value
+Cannot set gray non-stroke color because /'P1190' is an invalid float value
+Cannot set gray non-stroke color because /'P1211' is an invalid float value
+Cannot set gray non-stroke color because /'P1232' is an invalid float value
+Cannot set gray non-stroke color because /'P1252' is an invalid float value
+Cannot set gray non-stroke color because /'P1260' is an invalid float value
+Cannot set gray non-stroke color because /'P1262' is an invalid float value
+Cannot set gray non-stroke color because /'P1264' is an invalid float value
+Cannot set gray non-stroke color because /'P1266' is an invalid float value
+Cannot set gray non-stroke color because /'P1272' is an invalid float value
+Cannot set gray non-stroke color because /'P1278' is an invalid float value
+Cannot set gray non-stroke color because /'P1284' is an invalid float value
+Cannot set gray non-stroke color because /'P1286' is an invalid float value
+Cannot set gray non-stroke color because /'P1288' is an invalid float value
+Cannot set gray non-stroke color because /'P1294' is an invalid float value
+Cannot set gray non-stroke color because /'P1304' is an invalid float value
+Cannot set gray non-stroke color because /'P1325' is an invalid float value
+Cannot set gray non-stroke color because /'P1346' is an invalid float value
+Cannot set gray non-stroke color because /'P1367' is an invalid float value
+Cannot set gray non-stroke color because /'P1391' is an invalid float value
+Cannot set gray non-stroke color because /'P1402' is an invalid float value
+Cannot set gray non-stroke color because /'P1410' is an invalid float value
+Cannot set gray non-stroke color because /'P1431' is an invalid float value
+Cannot set gray non-stroke color because /'P1452' is an invalid float value
+Cannot set gray non-stroke color because /'P1473' is an invalid float value
+Cannot set gray non-stroke color because /'P1497' is an invalid float value
+Cannot set gray non-stroke color because /'P1508' is an invalid float value
+Cannot set gray non-stroke color because /'P1518' is an invalid float value
+Cannot set gray non-stroke color because /'P1543' is an invalid float value
+2026-08-26 12:44:36.330 | INFO     | magic_pdf.libs.pdf_check:detect_invalid_chars:67 - cid_count: 0, text_len: 4366, cid_chars_radio: 0.0
+2026-08-26 12:44:43.060 | INFO     | magic_pdf.model.doc_analyze_by_custom_model:doc_analyze:162 - Batch 1/1: 47 pages/47 pages
+2026-08-26 12:44:43.063 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:68 - DocAnalysis init, this may take some times, layout_model: doclayout_yolo, apply_formula: False, apply_ocr: True, apply_table: True, table_model: rapid_table, lang: None
+2026-08-26 12:44:43.063 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:82 - using device: cpu
+2026-08-26 12:44:43.063 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:86 - using models_dir: /Users/liuyiting/.cache/huggingface/hub/models--opendatalab--PDF-Extract-Kit-1.0/snapshots/ed6b654c018d742e65a17671e379c5e6ecc87ec9/models
+2026-08-26 12:44:43.156 | WARNING  | magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.pytorch_paddle:__init__:59 - The current device in use is CPU. To ensure the speed of parsing, the language is automatically switched to ch_lite.
+[32m[INFO] 2026-08-26 12:44:43,680 [RapidTable] download_model.py:38: Download https://www.modelscope.cn/models/RapidAI/RapidTable/resolve/master//slanet-plus.onnx to /opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/rapid_table/models[0m
+slanet-plus.onnx:   0%|          | 0.00/7.40M [00:00<?, ?b/s]slanet-plus.onnx:  53%|█████▎    | 3.94M/7.40M [00:00<00:00, 17.1Mb/s]slanet-plus.onnx: 100%|██████████| 7.40M/7.40M [00:00<00:00, 24.0Mb/s]
+2026-08-26 12:44:46.524 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:164 - DocAnalysis init done!
+2026-08-26 12:44:46.524 | INFO     | magic_pdf.model.doc_analyze_by_custom_model:custom_model_init:116 - model init cost: 3.461796998977661
+Layout Predict:   0%|          | 0/47 [00:00<?, ?it/s]Layout Predict:   2%|▏         | 1/47 [00:01<01:27,  1.91s/it]Layout Predict:   4%|▍         | 2/47 [00:03<01:20,  1.78s/it]Layout Predict:   6%|▋         | 3/47 [00:05<01:15,  1.72s/it]Layout Predict:   9%|▊         | 4/47 [00:06<01:13,  1.72s/it]Layout Predict:  11%|█         | 5/47 [00:08<01:11,  1.70s/it]Layout Predict:  13%|█▎        | 6/47 [00:10<01:09,  1.68s/it]Layout Predict:  15%|█▍        | 7/47 [00:11<01:06,  1.67s/it]Layout Predict:  17%|█▋        | 8/47 [00:13<01:04,  1.66s/it]Layout Predict:  19%|█▉        | 9/47 [00:15<01:02,  1.65s/it]Layout Predict:  21%|██▏       | 10/47 [00:16<01:02,  1.68s/it]Layout Predict:  23%|██▎       | 11/47 [00:18<01:00,  1.68s/it]Layout Predict:  26%|██▌       | 12/47 [00:20<00:58,  1.68s/it]Layout Predict:  28%|██▊       | 13/47 [00:22<00:57,  1.69s/it]Layout Predict:  30%|██▉       | 14/47 [00:23<00:56,  1.71s/it]Layout Predict:  32%|███▏      | 15/47 [00:25<00:54,  1.72s/it]Layout Predict:  34%|███▍      | 16/47 [00:27<00:52,  1.71s/it]Layout Predict:  36%|███▌      | 17/47 [00:28<00:51,  1.70s/it]Layout Predict:  38%|███▊      | 18/47 [00:30<00:49,  1.70s/it]Layout Predict:  40%|████      | 19/47 [00:32<00:47,  1.70s/it]Layout Predict:  43%|████▎     | 20/47 [00:34<00:46,  1.73s/it]Layout Predict:  45%|████▍     | 21/47 [00:35<00:45,  1.76s/it]Layout Predict:  47%|████▋     | 22/47 [00:37<00:44,  1.78s/it]Layout Predict:  49%|████▉     | 23/47 [00:39<00:43,  1.81s/it]Layout Predict:  51%|█████     | 24/47 [00:41<00:44,  1.94s/it]Layout Predict:  53%|█████▎    | 25/47 [00:43<00:42,  1.92s/it]Layout Predict:  55%|█████▌    | 26/47 [00:45<00:38,  1.85s/it]Layout Predict:  57%|█████▋    | 27/47 [00:47<00:37,  1.88s/it]Layout Predict:  60%|█████▉    | 28/47 [00:49<00:34,  1.82s/it]Layout Predict:  62%|██████▏   | 29/47 [00:50<00:31,  1.77s/it]Layout Predict:  64%|██████▍   | 30/47 [00:52<00:29,  1.74s/it]Layout Predict:  66%|██████▌   | 31/47 [00:54<00:27,  1.72s/it]Layout Predict:  68%|██████▊   | 32/47 [00:55<00:26,  1.74s/it]Layout Predict:  70%|███████   | 33/47 [00:57<00:24,  1.75s/it]Layout Predict:  72%|███████▏  | 34/47 [00:59<00:22,  1.76s/it]Layout Predict:  74%|███████▍  | 35/47 [01:01<00:21,  1.79s/it]Layout Predict:  77%|███████▋  | 36/47 [01:03<00:19,  1.81s/it]Layout Predict:  79%|███████▊  | 37/47 [01:05<00:18,  1.85s/it]Layout Predict:  81%|████████  | 38/47 [01:07<00:17,  1.94s/it]Layout Predict:  83%|████████▎ | 39/47 [01:09<00:15,  1.94s/it]Layout Predict:  85%|████████▌ | 40/47 [01:11<00:14,  2.01s/it]Layout Predict:  87%|████████▋ | 41/47 [01:13<00:12,  2.08s/it]Layout Predict:  89%|████████▉ | 42/47 [01:15<00:10,  2.01s/it]Layout Predict:  91%|█████████▏| 43/47 [01:17<00:07,  1.92s/it]Layout Predict:  94%|█████████▎| 44/47 [01:18<00:05,  1.90s/it]Layout Predict:  96%|█████████▌| 45/47 [01:20<00:03,  1.87s/it]Layout Predict:  98%|█████████▊| 46/47 [01:22<00:01,  1.86s/it]Layout Predict: 100%|██████████| 47/47 [01:24<00:00,  1.88s/it]Layout Predict: 100%|██████████| 47/47 [01:24<00:00,  1.80s/it]
+OCR-det Predict:   0%|          | 0/47 [00:00<?, ?it/s]2026-08-26 12:46:11.044 | WARNING  | magic_pdf.model.sub_modules.ocr.paddleocr2pytorch.pytorch_paddle:__init__:59 - The current device in use is CPU. To ensure the speed of parsing, the language is automatically switched to ch_lite.
+OCR-det Predict:   2%|▏         | 1/47 [00:01<01:06,  1.45s/it]OCR-det Predict:   4%|▍         | 2/47 [00:02<01:07,  1.49s/it]OCR-det Predict:   6%|▋         | 3/47 [00:04<00:59,  1.36s/it]OCR-det Predict:   9%|▊         | 4/47 [00:05<01:04,  1.49s/it]OCR-det Predict:  11%|█         | 5/47 [00:07<01:01,  1.46s/it]OCR-det Predict:  13%|█▎        | 6/47 [00:09<01:06,  1.62s/it]OCR-det Predict:  15%|█▍        | 7/47 [00:11<01:08,  1.72s/it]OCR-det Predict:  17%|█▋        | 8/47 [00:12<00:57,  1.49s/it]OCR-det Predict:  19%|█▉        | 9/47 [00:13<00:52,  1.38s/it]OCR-det Predict:  21%|██▏       | 10/47 [00:15<00:56,  1.54s/it]OCR-det Predict:  23%|██▎       | 11/47 [00:16<00:55,  1.54s/it]OCR-det Predict:  26%|██▌       | 12/47 [00:22<01:35,  2.72s/it]OCR-det Predict:  28%|██▊       | 13/47 [00:23<01:22,  2.43s/it]OCR-det Predict:  30%|██▉       | 14/47 [00:24<01:05,  1.98s/it]OCR-det Predict:  32%|███▏      | 15/47 [00:25<00:51,  1.62s/it]OCR-det Predict:  34%|███▍      | 16/47 [00:27<00:54,  1.77s/it]OCR-det Predict:  36%|███▌      | 17/47 [00:28<00:43,  1.44s/it]OCR-det Predict:  38%|███▊      | 18/47 [00:29<00:39,  1.35s/it]OCR-det Predict:  40%|████      | 19/47 [00:32<00:49,  1.76s/it]OCR-det Predict:  43%|████▎     | 20/47 [00:34<00:49,  1.84s/it]OCR-det Predict:  45%|████▍     | 21/47 [00:36<00:47,  1.81s/it]OCR-det Predict:  47%|████▋     | 22/47 [00:36<00:37,  1.50s/it]OCR-det Predict:  49%|████▉     | 23/47 [00:37<00:30,  1.26s/it]OCR-det Predict:  51%|█████     | 24/47 [00:39<00:33,  1.46s/it]OCR-det Predict:  53%|█████▎    | 25/47 [00:40<00:32,  1.47s/it]OCR-det Predict:  55%|█████▌    | 26/47 [00:41<00:26,  1.28s/it]OCR-det Predict:  57%|█████▋    | 27/47 [00:43<00:28,  1.44s/it]OCR-det Predict:  60%|█████▉    | 28/47 [00:44<00:25,  1.35s/it]OCR-det Predict:  62%|██████▏   | 29/47 [00:46<00:25,  1.43s/it]OCR-det Predict:  64%|██████▍   | 30/47 [00:47<00:23,  1.36s/it]OCR-det Predict:  66%|██████▌   | 31/47 [00:49<00:27,  1.69s/it]OCR-det Predict:  68%|██████▊   | 32/47 [00:52<00:30,  2.06s/it]OCR-det Predict:  70%|███████   | 33/47 [00:55<00:30,  2.14s/it]OCR-det Predict:  72%|███████▏  | 34/47 [00:56<00:25,  1.97s/it]OCR-det Predict:  74%|███████▍  | 35/47 [00:58<00:22,  1.84s/it]OCR-det Predict:  77%|███████▋  | 36/47 [01:00<00:21,  2.00s/it]OCR-det Predict:  79%|███████▊  | 37/47 [01:02<00:20,  2.01s/it]OCR-det Predict:  81%|████████  | 38/47 [01:05<00:18,  2.09s/it]OCR-det Predict:  83%|████████▎ | 39/47 [01:07<00:18,  2.25s/it]OCR-det Predict:  85%|████████▌ | 40/47 [01:10<00:17,  2.47s/it]OCR-det Predict:  87%|████████▋ | 41/47 [01:11<00:12,  2.03s/it]OCR-det Predict:  89%|████████▉ | 42/47 [01:13<00:09,  1.96s/it]OCR-det Predict:  91%|█████████▏| 43/47 [01:14<00:06,  1.57s/it]OCR-det Predict:  94%|█████████▎| 44/47 [01:14<00:03,  1.30s/it]OCR-det Predict:  96%|█████████▌| 45/47 [01:16<00:02,  1.46s/it]OCR-det Predict:  98%|█████████▊| 46/47 [01:18<00:01,  1.58s/it]OCR-det Predict: 100%|██████████| 47/47 [01:18<00:00,  1.23s/it]OCR-det Predict: 100%|██████████| 47/47 [01:18<00:00,  1.68s/it]
+Table Predict: 0it [00:00, ?it/s]Table Predict: 0it [00:00, ?it/s]
+Processing pages:   0%|          | 0/47 [00:00<?, ?it/s]Processing pages:   2%|▏         | 1/47 [00:23<18:17, 23.86s/it]Processing pages:   4%|▍         | 2/47 [00:23<07:25,  9.90s/it]Processing pages:   6%|▋         | 3/47 [00:24<03:59,  5.45s/it]Processing pages:   9%|▊         | 4/47 [00:24<02:25,  3.39s/it]Processing pages:  11%|█         | 5/47 [00:24<01:33,  2.22s/it]Processing pages:  13%|█▎        | 6/47 [00:24<01:05,  1.59s/it]Processing pages:  15%|█▍        | 7/47 [00:25<00:47,  1.18s/it]Processing pages:  17%|█▋        | 8/47 [00:25<00:35,  1.11it/s]Processing pages:  19%|█▉        | 9/47 [00:26<00:31,  1.22it/s]Processing pages:  21%|██▏       | 10/47 [00:26<00:27,  1.35it/s]Processing pages:  23%|██▎       | 11/47 [00:27<00:22,  1.57it/s]Processing pages:  26%|██▌       | 12/47 [00:27<00:19,  1.83it/s]Processing pages:  28%|██▊       | 13/47 [00:27<00:15,  2.25it/s]Processing pages:  30%|██▉       | 14/47 [00:27<00:13,  2.54it/s]Processing pages:  32%|███▏      | 15/47 [00:28<00:12,  2.65it/s]Processing pages:  34%|███▍      | 16/47 [00:28<00:09,  3.23it/s]Processing pages:  36%|███▌      | 17/47 [00:28<00:10,  2.88it/s]Processing pages:  38%|███▊      | 18/47 [00:29<00:09,  3.05it/s]Processing pages:  40%|████      | 19/47 [00:29<00:08,  3.44it/s]Processing pages:  43%|████▎     | 20/47 [00:29<00:07,  3.45it/s]Processing pages:  45%|████▍     | 21/47 [00:29<00:07,  3.54it/s]Processing pages:  47%|████▋     | 22/47 [00:30<00:07,  3.30it/s]Processing pages:  49%|████▉     | 23/47 [00:30<00:06,  3.96it/s]Processing pages:  51%|█████     | 24/47 [00:30<00:06,  3.50it/s]Processing pages:  53%|█████▎    | 25/47 [00:31<00:06,  3.28it/s]Processing pages:  55%|█████▌    | 26/47 [00:31<00:05,  3.90it/s]Processing pages:  57%|█████▋    | 27/47 [00:31<00:04,  4.30it/s]Processing pages:  60%|█████▉    | 28/47 [00:31<00:03,  5.04it/s]Processing pages:  62%|██████▏   | 29/47 [00:31<00:03,  4.87it/s]Processing pages:  64%|██████▍   | 30/47 [00:32<00:04,  4.22it/s]Processing pages:  66%|██████▌   | 31/47 [00:32<00:03,  4.39it/s]Processing pages:  68%|██████▊   | 32/47 [00:32<00:03,  4.14it/s]Processing pages:  70%|███████   | 33/47 [00:32<00:03,  3.73it/s]Processing pages:  72%|███████▏  | 34/47 [00:33<00:03,  3.78it/s]Processing pages:  74%|███████▍  | 35/47 [00:33<00:02,  4.32it/s]Processing pages:  77%|███████▋  | 36/47 [00:33<00:02,  4.27it/s]Processing pages:  79%|███████▊  | 37/47 [00:33<00:02,  3.81it/s]Processing pages:  81%|████████  | 38/47 [00:34<00:02,  3.95it/s]Processing pages:  83%|████████▎ | 39/47 [00:34<00:02,  3.80it/s]Processing pages:  85%|████████▌ | 40/47 [00:34<00:02,  3.03it/s]Processing pages:  87%|████████▋ | 41/47 [00:35<00:01,  3.11it/s]Processing pages:  89%|████████▉ | 42/47 [00:35<00:01,  3.36it/s]Processing pages:  91%|█████████▏| 43/47 [00:35<00:01,  3.11it/s]Processing pages:  94%|█████████▎| 44/47 [00:36<00:01,  2.70it/s]Processing pages:  96%|█████████▌| 45/47 [00:36<00:00,  2.90it/s]Processing pages:  98%|█████████▊| 46/47 [00:36<00:00,  3.46it/s]Processing pages: 100%|██████████| 47/47 [00:36<00:00,  4.20it/s]Processing pages: 100%|██████████| 47/47 [00:36<00:00,  1.28it/s]
+OCR-rec Predict:   0%|          | 0/312 [00:00<?, ?it/s]OCR-rec Predict:   2%|▏         | 6/312 [00:00<00:39,  7.76it/s]OCR-rec Predict:   4%|▍         | 12/312 [00:01<00:40,  7.42it/s]OCR-rec Predict:   6%|▌         | 18/312 [00:02<00:45,  6.52it/s]OCR-rec Predict:   8%|▊         | 24/312 [00:03<00:43,  6.55it/s]OCR-rec Predict:  10%|▉         | 30/312 [00:04<00:36,  7.73it/s]OCR-rec Predict:  12%|█▏        | 36/312 [00:04<00:31,  8.90it/s]OCR-rec Predict:  13%|█▎        | 42/312 [00:05<00:27,  9.90it/s]OCR-rec Predict:  15%|█▌        | 48/312 [00:05<00:25, 10.39it/s]OCR-rec Predict:  17%|█▋        | 54/312 [00:06<00:23, 11.03it/s]OCR-rec Predict:  19%|█▉        | 60/312 [00:06<00:22, 11.37it/s]OCR-rec Predict:  21%|██        | 66/312 [00:06<00:20, 11.77it/s]OCR-rec Predict:  23%|██▎       | 72/312 [00:07<00:19, 12.02it/s]OCR-rec Predict:  25%|██▌       | 78/312 [00:07<00:19, 12.28it/s]OCR-rec Predict:  27%|██▋       | 84/312 [00:08<00:18, 12.29it/s]OCR-rec Predict:  29%|██▉       | 90/312 [00:08<00:18, 12.13it/s]OCR-rec Predict:  31%|███       | 96/312 [00:09<00:17, 12.37it/s]OCR-rec Predict:  33%|███▎      | 102/312 [00:09<00:16, 12.84it/s]OCR-rec Predict:  35%|███▍      | 108/312 [00:10<00:16, 12.22it/s]OCR-rec Predict:  37%|███▋      | 114/312 [00:10<00:15, 12.58it/s]OCR-rec Predict:  38%|███▊      | 120/312 [00:11<00:15, 12.58it/s]OCR-rec Predict:  40%|████      | 126/312 [00:11<00:14, 12.74it/s]OCR-rec Predict:  42%|████▏     | 132/312 [00:12<00:13, 13.11it/s]OCR-rec Predict:  44%|████▍     | 138/312 [00:12<00:13, 12.95it/s]OCR-rec Predict:  46%|████▌     | 144/312 [00:13<00:12, 13.23it/s]OCR-rec Predict:  48%|████▊     | 150/312 [00:13<00:12, 13.40it/s]OCR-rec Predict:  50%|█████     | 156/312 [00:13<00:11, 13.14it/s]OCR-rec Predict:  52%|█████▏    | 162/312 [00:14<00:11, 12.95it/s]OCR-rec Predict:  54%|█████▍    | 168/312 [00:14<00:10, 13.10it/s]OCR-rec Predict:  56%|█████▌    | 174/312 [00:15<00:10, 13.18it/s]OCR-rec Predict:  58%|█████▊    | 180/312 [00:15<00:10, 13.20it/s]OCR-rec Predict:  60%|█████▉    | 186/312 [00:16<00:09, 13.04it/s]OCR-rec Predict:  62%|██████▏   | 192/312 [00:16<00:09, 12.51it/s]OCR-rec Predict:  63%|██████▎   | 198/312 [00:17<00:09, 12.10it/s]OCR-rec Predict:  65%|██████▌   | 204/312 [00:17<00:08, 12.05it/s]OCR-rec Predict:  67%|██████▋   | 210/312 [00:18<00:08, 11.86it/s]OCR-rec Predict:  69%|██████▉   | 216/312 [00:18<00:08, 11.78it/s]OCR-rec Predict:  71%|███████   | 222/312 [00:19<00:07, 11.58it/s]OCR-rec Predict:  73%|███████▎  | 228/312 [00:19<00:07, 11.70it/s]OCR-rec Predict:  75%|███████▌  | 234/312 [00:20<00:06, 11.29it/s]OCR-rec Predict:  77%|███████▋  | 240/312 [00:21<00:06, 10.78it/s]OCR-rec Predict:  79%|███████▉  | 246/312 [00:21<00:06, 10.56it/s]OCR-rec Predict:  81%|████████  | 252/312 [00:22<00:06,  9.98it/s]OCR-rec Predict:  83%|████████▎ | 258/312 [00:23<00:05,  9.62it/s]OCR-rec Predict:  85%|████████▍ | 264/312 [00:23<00:05,  8.82it/s]OCR-rec Predict:  87%|████████▋ | 270/312 [00:24<00:05,  8.10it/s]OCR-rec Predict:  88%|████████▊ | 276/312 [00:25<00:04,  7.60it/s]OCR-rec Predict:  90%|█████████ | 282/312 [00:26<00:04,  7.28it/s]OCR-rec Predict:  92%|█████████▏| 288/312 [00:27<00:03,  7.11it/s]OCR-rec Predict:  94%|█████████▍| 294/312 [00:28<00:02,  7.06it/s]OCR-rec Predict:  96%|█████████▌| 300/312 [00:29<00:01,  6.99it/s]OCR-rec Predict:  98%|█████████▊| 306/312 [00:30<00:00,  6.69it/s]OCR-rec Predict: 100%|██████████| 312/312 [00:31<00:00,  6.16it/s]OCR-rec Predict: 100%|██████████| 312/312 [00:31<00:00,  9.95it/s]
+2026-08-26 12:48:40.591 | WARNING  | magic_pdf.libs.config_reader:get_llm_aided_config:123 - 'llm-aided-config' not found in /Users/liuyiting/magic-pdf.json, use 'None' as default
+2026-08-26 12:48:41.867 | INFO     | magic_pdf.tools.common:_do_parse:243 - local output dir is pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output/2024年KOL发展年报/auto

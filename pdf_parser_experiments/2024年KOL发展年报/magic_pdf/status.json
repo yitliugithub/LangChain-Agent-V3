@@ -1,7 +1,7 @@
 {
   "tool": "magic_pdf",
-  "status": "failed",
-  "seconds": 16.47,
+  "status": "success",
+  "seconds": 253.34,
   "command": "magic-pdf",
   "backend": "pipeline",
   "method": "auto",
@@ -13,6 +13,7 @@
   "raw_output_dir": "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output",
   "cleaned_text": "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/cleaned_text.md",
   "log": "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/run.log",
-  "markdown_files_found": [],
-  "error": "MinerU/Magic-PDF wrote an ERROR or Traceback in run.log."
+  "markdown_files_found": [
+    "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output/2024年KOL发展年报/auto/2024年KOL发展年报.md"
+  ]
 }
