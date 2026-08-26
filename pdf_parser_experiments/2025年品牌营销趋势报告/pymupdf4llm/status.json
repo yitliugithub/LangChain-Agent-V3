@@ -1,6 +1,7 @@
 {
   "tool": "pymupdf4llm",
   "status": "success",
-  "seconds": 4.53,
-  "output": "pdf_parser_experiments/2025年品牌营销趋势报告/pymupdf4llm/output.md"
+  "seconds": 4.2,
+  "output": "pdf_parser_experiments/2025年品牌营销趋势报告/pymupdf4llm/output.md",
+  "cleaned_text": "pdf_parser_experiments/2025年品牌营销趋势报告/pymupdf4llm/cleaned_text.md"
 }

@@ -1,0 +1,7 @@
+{
+  "tool": "pymupdf4llm",
+  "status": "success",
+  "seconds": 3.31,
+  "output": "pdf_parser_experiments/2025抖音家电行业趋势风向指南/pymupdf4llm/output.md",
+  "cleaned_text": "pdf_parser_experiments/2025抖音家电行业趋势风向指南/pymupdf4llm/cleaned_text.md"
+}

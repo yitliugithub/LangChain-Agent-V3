@@ -1,0 +1,42 @@
+Found 1 PDF file(s).
+Output directory: pdf_parser_experiments
+
+=== Running parser experiment for rag_data/2024年KOL发展年报.pdf ===
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+[PP-Structure] skipping existing page 1: pdf_parser_experiments/2024年KOL发展年报/pp_structure/raw_markdown/page_0001/page_0001.md
+[PP-Structure] skipping existing page 2: pdf_parser_experiments/2024年KOL发展年报/pp_structure/raw_markdown/page_0002/page_0002.md
+[PP-Structure] skipping existing page 3: pdf_parser_experiments/2024年KOL发展年报/pp_structure/raw_markdown/page_0003/page_0003.md
+[PP-Structure] parsing page 4: page_0004.png
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-LCNet_x1_0_doc_ori`.
+Creating model: ('UVDoc', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/UVDoc`.
+Creating model: ('PP-DocLayout_plus-L', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-DocLayout_plus-L`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-OCRv5_server_rec`.
+Creating model: ('PP-LCNet_x1_0_table_cls', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-LCNet_x1_0_table_cls`.
+Creating model: ('SLANeXt_wired', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/SLANeXt_wired`.
+Creating model: ('SLANet_plus', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/SLANet_plus`.
+Creating model: ('RT-DETR-L_wired_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/RT-DETR-L_wired_table_cell_det`.
+Creating model: ('RT-DETR-L_wireless_table_cell_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/RT-DETR-L_wireless_table_cell_det`.
+Creating model: ('PP-LCNet_x1_0_doc_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-LCNet_x1_0_doc_ori`.
+Creating model: ('PP-LCNet_x1_0_textline_ori', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-LCNet_x1_0_textline_ori`.
+Creating model: ('PP-OCRv5_server_det', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-OCRv5_server_det`.
+Creating model: ('PP-OCRv5_server_rec', None, None)
+Model files already exist. Using cached files. To redownload, please delete the directory manually: `/Users/liuyiting/.paddlex/official_models/PP-OCRv5_server_rec`.
+[PP-Structure] parsing page 5: page_0005.png
+[PP-Structure] parsing page 6: page_0006.png
+[PP-Structure] parsing page 7: page_0007.png

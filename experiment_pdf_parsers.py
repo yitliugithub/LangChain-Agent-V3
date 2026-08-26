@@ -273,6 +273,34 @@ def save_v3_raw_markdown(result, raw_markdown_dir: Path, page_number: int):
     return ""
 
 
+def find_saved_page_markdown(raw_markdown_dir: Path, page_number: int):
+    page_dir = raw_markdown_dir / f"page_{page_number:04d}"
+    markdown_files = sorted(page_dir.rglob("*.md"))
+    if markdown_files:
+        return markdown_files[0]
+    return None
+
+
+def rebuild_cleaned_text_from_raw_pages(pp_output_dir: Path, pdf_name: str, options: dict):
+    raw_markdown_dir = pp_output_dir / "raw_markdown"
+    cleaned_parts = [
+        "# Cleaned PP-Structure Text\n",
+        f"Source: {pdf_name}\n",
+        f"Mode: {options.get('mode', 'full')}\n",
+        f"DPI scale: {options.get('dpi_scale', 2.0)}\n",
+        f"Page range: {options.get('page_range', '') or 'all'}\n",
+    ]
+
+    for page_md in sorted(raw_markdown_dir.glob("page_*/page_*.md")):
+        page_num = page_md.parent.name.split("_")[-1].lstrip("0") or "0"
+        cleaned_parts.append(f"\n\n## Page {page_num}\n")
+        cleaned_parts.append(
+            clean_markdown_for_text_rag(page_md.read_text(encoding="utf-8"))
+        )
+
+    write_text(pp_output_dir / "cleaned_text.md", "\n".join(cleaned_parts))
+
+
 def extract_v3_markdown_text(result):
     markdown = getattr(result, "markdown", None)
     if isinstance(markdown, dict):
@@ -468,14 +496,8 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
             f"Page range: {options.get('page_range', '') or 'all'}\n",
         ]
         raw_results = []
-        cleaned_parts = [
-            "# Cleaned PP-Structure Text\n",
-            f"Source: {pdf_path.name}\n",
-            f"Mode: {options.get('mode', 'full')}\n",
-            f"DPI scale: {options.get('dpi_scale', 2.0)}\n",
-            f"Page range: {options.get('page_range', '') or 'all'}\n",
-        ]
         media_metadata = []
+        api_version = "unknown"
 
         with tempfile.TemporaryDirectory() as temp_dir:
             image_paths = _pdf_to_page_images(
@@ -484,10 +506,36 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
                 dpi_scale=options.get("dpi_scale", 2.0),
                 page_range=options.get("page_range", ""),
             )
-            api_version, engine = create_pp_structure_engine(options)
+            engine = None
 
             for page_number, image_path in image_paths:
-                print(f"[PP-Structure] parsing page {page_number}: {image_path.name}")
+                saved_page_md = find_saved_page_markdown(raw_markdown_dir, page_number)
+                if saved_page_md:
+                    print(
+                        "[PP-Structure] skipping existing page "
+                        f"{page_number}: {saved_page_md}",
+                        flush=True,
+                    )
+                    markdown_parts.append(f"\n\n## Page {page_number}\n")
+                    markdown_parts.append(saved_page_md.read_text(encoding="utf-8"))
+                    raw_results.append(
+                        {
+                            "page": page_number,
+                            "api_version": "cached",
+                            "raw_markdown_outputs": [str(saved_page_md)],
+                            "result": [],
+                        }
+                    )
+                    rebuild_cleaned_text_from_raw_pages(pp_output_dir, pdf_path.name, options)
+                    continue
+
+                print(
+                    f"[PP-Structure] parsing page {page_number}: {image_path.name}",
+                    flush=True,
+                )
+                if engine is None:
+                    api_version, engine = create_pp_structure_engine(options)
+
                 if api_version == "v3":
                     page_results = list(
                         engine.predict(
@@ -535,11 +583,10 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
                         _v3_result_to_markdown(page_number, page_results)
                     )
                     if page_text_parts:
-                        cleaned_parts.append(f"\n\n## Page {page_number}\n")
-                        cleaned_parts.append(
-                            clean_markdown_for_text_rag(
-                                "\n\n".join(page_text_parts)
-                            )
+                        rebuild_cleaned_text_from_raw_pages(
+                            pp_output_dir,
+                            pdf_path.name,
+                            options,
                         )
                 else:
                     image = cv2.imread(str(image_path))
@@ -564,18 +611,19 @@ def parse_with_pp_structure(pdf_path: Path, output_dir: Path, options: dict):
                     markdown_parts.append(
                         _ppstructure_result_to_markdown(page_number, serializable_result)
                     )
-                    cleaned_parts.append(f"\n\n## Page {page_number}\n")
-                    cleaned_parts.append(
-                        clean_markdown_for_text_rag(
-                            _ppstructure_result_to_markdown(
-                                page_number,
-                                serializable_result,
-                            )
-                        )
+                    page_dir = raw_markdown_dir / f"page_{page_number:04d}"
+                    write_text(
+                        page_dir / f"page_{page_number:04d}.md",
+                        _ppstructure_result_to_markdown(page_number, serializable_result),
+                    )
+                    rebuild_cleaned_text_from_raw_pages(
+                        pp_output_dir,
+                        pdf_path.name,
+                        options,
                     )
 
         write_text(pp_output_dir / "output.md", "\n".join(markdown_parts))
-        write_text(pp_output_dir / "cleaned_text.md", "\n".join(cleaned_parts))
+        rebuild_cleaned_text_from_raw_pages(pp_output_dir, pdf_path.name, options)
         (pp_output_dir / "raw_result.json").write_text(
             json.dumps(raw_results, ensure_ascii=False, indent=2, default=str),
             encoding="utf-8",
