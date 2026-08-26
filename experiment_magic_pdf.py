@@ -48,7 +48,14 @@ def resolve_command(preferred_command: str):
     )
 
 
-def build_command(command: str, pdf_path: Path, raw_output_dir: Path, backend: str):
+def build_command(
+    command: str,
+    pdf_path: Path,
+    raw_output_dir: Path,
+    backend: str,
+    method: str,
+    lang: str,
+):
     if command == "mineru":
         cmd = [
             command,
@@ -62,16 +69,20 @@ def build_command(command: str, pdf_path: Path, raw_output_dir: Path, backend: s
         return cmd
 
     if command == "magic-pdf":
-        # Older Magic-PDF releases use this command style and write outputs
-        # under the configured output directory or /tmp/magic-pdf.
-        return [
+        # magic-pdf 1.x uses the unified CLI style below. It writes parser
+        # artifacts directly under the output directory.
+        cmd = [
             command,
-            "pdf-command",
-            "--pdf",
+            "-p",
             str(pdf_path),
-            "--inside_model",
-            "true",
+            "-o",
+            str(raw_output_dir),
         ]
+        if method:
+            cmd.extend(["-m", method])
+        if lang:
+            cmd.extend(["-l", lang])
+        return cmd
 
     raise ValueError(f"Unsupported command: {command}")
 
@@ -136,6 +147,8 @@ def run_magic_pdf_experiment(
     output_root: Path,
     preferred_command: str,
     backend: str,
+    method: str,
+    lang: str,
 ):
     start = now_seconds()
     pdf_path = pdf_path.expanduser().resolve()
@@ -165,7 +178,14 @@ def run_magic_pdf_experiment(
 
     try:
         command = resolve_command(preferred_command)
-        cmd = build_command(command, pdf_path, raw_output_dir, backend)
+        cmd = build_command(
+            command,
+            pdf_path,
+            raw_output_dir,
+            backend,
+            method,
+            lang,
+        )
 
         with log_path.open("w", encoding="utf-8") as log_file:
             log_file.write("Command:\n")
@@ -193,6 +213,8 @@ def run_magic_pdf_experiment(
             "seconds": round(now_seconds() - start, 2),
             "command": command,
             "backend": backend,
+            "method": method,
+            "lang": lang,
             "returncode": completed.returncode,
             "input": str(pdf_path),
             "raw_output_dir": str(raw_output_dir),
@@ -245,6 +267,20 @@ def main():
             "Ignored by older magic-pdf command."
         ),
     )
+    parser.add_argument(
+        "--method",
+        default="auto",
+        choices=["auto", "ocr", "txt"],
+        help=(
+            "magic-pdf parsing method. auto chooses between text extraction "
+            "and OCR; ocr forces OCR; txt is faster for text-based PDFs."
+        ),
+    )
+    parser.add_argument(
+        "--lang",
+        default="ch",
+        help="OCR language hint for magic-pdf, for example 'ch' for Chinese.",
+    )
 
     args = parser.parse_args()
     status = run_magic_pdf_experiment(
@@ -252,6 +288,8 @@ def main():
         output_root=Path(args.output_dir),
         preferred_command=args.command,
         backend=args.backend,
+        method=args.method,
+        lang=args.lang,
     )
 
     print(json.dumps(status, ensure_ascii=False, indent=2))
