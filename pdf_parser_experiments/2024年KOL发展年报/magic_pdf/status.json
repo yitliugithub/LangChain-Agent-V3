@@ -1,0 +1,15 @@
+{
+  "tool": "magic_pdf",
+  "status": "success",
+  "seconds": 1.69,
+  "command": "magic-pdf",
+  "backend": "pipeline",
+  "method": "auto",
+  "lang": "ch",
+  "returncode": 0,
+  "input": "/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf",
+  "raw_output_dir": "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output",
+  "cleaned_text": "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/cleaned_text.md",
+  "log": "pdf_parser_experiments/2024年KOL发展年报/magic_pdf/run.log",
+  "markdown_files_found": []
+}

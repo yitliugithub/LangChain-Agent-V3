@@ -1,7 +1,0 @@
-{
-  "tool": "pymupdf4llm",
-  "status": "success",
-  "seconds": 15.52,
-  "output": "pdf_parser_experiments/2025年社交媒体与KOL营销趋势报告/pymupdf4llm/output.md",
-  "cleaned_text": "pdf_parser_experiments/2025年社交媒体与KOL营销趋势报告/pymupdf4llm/cleaned_text.md"
-}

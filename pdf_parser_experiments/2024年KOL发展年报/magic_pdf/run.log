@@ -1,0 +1,88 @@
+Command:
+magic-pdf -p /Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf -o pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output -m auto -l ch
+
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/requests/__init__.py:113: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (7.6.0)/charset_normalizer (3.4.9) doesn't match a supported version!
+  warnings.warn(
+2026-08-26 11:42:32.736 | ERROR    | magic_pdf.tools.cli:parse_doc:134 - /Users/liuyiting/magic-pdf.json not found
+Traceback (most recent call last):
+
+  File "/opt/miniconda3/envs/myenv/bin/magic-pdf", line 6, in <module>
+    sys.exit(cli())
+    │   │    └ <Command cli>
+    │   └ <built-in function exit>
+    └ <module 'sys' (built-in)>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 1569, in __call__
+    return self.main(*args, **kwargs)
+           │    │     │       └ {}
+           │    │     └ ()
+           │    └ <function Command.main at 0x1014c34c0>
+           └ <Command cli>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 1490, in main
+    rv = self.invoke(ctx)
+         │    │      └ <click.core.Context object at 0x100ee5490>
+         │    └ <function Command.invoke at 0x1014c31a0>
+         └ <Command cli>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 1353, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           │   │      │    │           │   └ {'path': '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf', 'output_dir': 'pdf_parser_experiments/2...
+           │   │      │    │           └ <click.core.Context object at 0x100ee5490>
+           │   │      │    └ <function cli at 0x10ccd5620>
+           │   │      └ <Command cli>
+           │   └ <function Context.invoke at 0x1014c23e0>
+           └ <click.core.Context object at 0x100ee5490>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 907, in invoke
+    return callback(*args, **kwargs)
+           │         │       └ {'path': '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf', 'output_dir': 'pdf_parser_experiments/2...
+           │         └ ()
+           └ <function cli at 0x10ccd5620>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/cli.py", line 155, in cli
+    parse_doc(Path(path))
+    │         │    └ '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf'
+    │         └ <class 'pathlib.Path'>
+    └ <function cli.<locals>.parse_doc at 0x100ec18a0>
+> File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/cli.py", line 121, in parse_doc
+    do_parse(
+    └ <function do_parse at 0x10ccd4c20>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/common.py", line 284, in do_parse
+    _do_parse(output_dir, pdf_file_name, pdf_bytes_or_dataset, model_list, parse_method, debug_able, start_page_id=start_page_id, end_page_id=end_page_id, lang=lang, layout_model=layout_model, formula_enable=formula_enable, table_enable=table_enable,  f_draw_span_bbox=f_draw_span_bbox, f_draw_layout_bbox=f_draw_layout_bbox, f_dump_md=f_dump_md, f_dump_middle_json=f_dump_middle_json, f_dump_model_json=f_dump_model_json, f_dump_orig_pdf=f_dump_orig_pdf, f_dump_content_list=f_dump_content_list, f_make_md_mode=f_make_md_mode, f_draw_model_bbox=f_draw_model_bbox, f_draw_line_sort_bbox=f_draw_line_sort_bbox, f_draw_char_bbox=f_draw_char_bbox)
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 │                                        │                                       └ False
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 │                                        └ False
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 └ False
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   └ 'mm_markdown'
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               └ True
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            └ None
+    │         │           │              │                     │           │             │                         │                          │                 │                  │                            └ None
+    │         │           │              │                     │           │             │                         │                          │                 │                  └ None
+    │         │           │              │                     │           │             │                         │                          │                 └ 'ch'
+    │         │           │              │                     │           │             │                         │                          └ None
+    │         │           │              │                     │           │             │                         └ 0
+    │         │           │              │                     │           │             └ False
+    │         │           │              │                     │           └ 'auto'
+    │         │           │              │                     └ []
+    │         │           │              └ b'%PDF-1.7\n%\xa1\xb3\xc5\xd7\n1 0 obj\r\n<</Type/Catalog/Pages 2 0 R /Lang(zh)/StructTreeRoot 2847 0 R /Outlines 2799 0 R /M...
+    │         │           └ '2024年KOL发展年报'
+    │         └ 'pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output'
+    └ <function _do_parse at 0x107c63240>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/common.py", line 95, in _do_parse
+    from magic_pdf.operators.models import InferenceResult
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/operators/__init__.py", line 6, in <module>
+    from magic_pdf.operators.pipes import PipeResult
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/operators/pipes.py", line 9, in <module>
+    from magic_pdf.dict2md.ocr_mkcontent import union_make
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/dict2md/ocr_mkcontent.py", line 163, in <module>
+    latex_delimiters_config = get_latex_delimiter_config()
+                              └ <function get_latex_delimiter_config at 0x10ccd4860>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/libs/config_reader.py", line 129, in get_latex_delimiter_config
+    config = read_config()
+             └ <function read_config at 0x10ccd4180>
+  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/libs/config_reader.py", line 23, in read_config
+    raise FileNotFoundError(f'{config_file} not found')
+
+FileNotFoundError: /Users/liuyiting/magic-pdf.json not found

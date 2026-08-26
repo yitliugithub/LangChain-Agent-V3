@@ -1,7 +1,0 @@
-{
-  "tool": "pymupdf4llm",
-  "status": "success",
-  "seconds": 4.45,
-  "output": "pdf_parser_experiments/2025中国量贩零食行业现状报告/pymupdf4llm/output.md",
-  "cleaned_text": "pdf_parser_experiments/2025中国量贩零食行业现状报告/pymupdf4llm/cleaned_text.md"
-}

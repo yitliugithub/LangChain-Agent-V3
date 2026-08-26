@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -87,6 +88,31 @@ def build_command(
     raise ValueError(f"Unsupported command: {command}")
 
 
+def build_magic_pdf_config(config_path: Path):
+    # Magic-PDF 1.x requires a JSON config file even when most values can use
+    # defaults. Keep this config inside the experiment folder for reproducibility.
+    config = {
+        "device-mode": "cpu",
+        "layout-config": {
+            "model": "layoutlmv3",
+        },
+        "formula-config": {
+            "mfd_model": "yolo_v8_mfd",
+            "mfr_model": "unimernet_small",
+            "enable": False,
+        },
+        "table-config": {
+            "model": "rapid_table",
+            "enable": True,
+            "max_time": 400,
+        },
+        "latex-delimiter-config": None,
+        "llm-aided-config": None,
+    }
+    write_json(config_path, config)
+    return config_path
+
+
 def collect_markdown_files(output_dir: Path):
     ignored_dirs = {"__MACOSX", ".git", "__pycache__"}
     markdown_files = []
@@ -163,6 +189,7 @@ def run_magic_pdf_experiment(
     cleaned_output_path = experiment_dir / "cleaned_text.md"
     log_path = experiment_dir / "run.log"
     status_path = experiment_dir / "status.json"
+    config_path = experiment_dir / "magic-pdf.json"
 
     experiment_dir.mkdir(parents=True, exist_ok=True)
     raw_output_dir.mkdir(parents=True, exist_ok=True)
@@ -186,10 +213,19 @@ def run_magic_pdf_experiment(
             method,
             lang,
         )
+        env = None
+        if command == "magic-pdf":
+            build_magic_pdf_config(config_path)
+            env = {
+                **os.environ,
+                "MINERU_TOOLS_CONFIG_JSON": str(config_path.resolve()),
+            }
 
         with log_path.open("w", encoding="utf-8") as log_file:
             log_file.write("Command:\n")
             log_file.write(" ".join(cmd) + "\n\n")
+            if command == "magic-pdf":
+                log_file.write(f"Config: {config_path.resolve()}\n\n")
             log_file.flush()
 
             completed = subprocess.run(
@@ -199,6 +235,7 @@ def run_magic_pdf_experiment(
                 stderr=subprocess.STDOUT,
                 text=True,
                 check=False,
+                env=env,
             )
 
         markdown_files = build_cleaned_text(
@@ -206,15 +243,20 @@ def run_magic_pdf_experiment(
             raw_output_dir,
             cleaned_output_path,
         )
+        log_text = log_path.read_text(encoding="utf-8", errors="replace")
+        has_runtime_error = "Traceback" in log_text or "ERROR" in log_text
+        has_markdown = bool(markdown_files)
+        ok = completed.returncode == 0 and has_markdown and not has_runtime_error
 
         status = {
             "tool": TOOL_NAME,
-            "status": "success" if completed.returncode == 0 else "failed",
+            "status": "success" if ok else "failed",
             "seconds": round(now_seconds() - start, 2),
             "command": command,
             "backend": backend,
             "method": method,
             "lang": lang,
+            "config": str(config_path) if command == "magic-pdf" else "",
             "returncode": completed.returncode,
             "input": str(pdf_path),
             "raw_output_dir": str(raw_output_dir),
@@ -224,6 +266,10 @@ def run_magic_pdf_experiment(
         }
         if completed.returncode != 0:
             status["error"] = "MinerU/Magic-PDF command returned a non-zero exit code."
+        elif has_runtime_error:
+            status["error"] = "MinerU/Magic-PDF wrote an ERROR or Traceback in run.log."
+        elif not has_markdown:
+            status["error"] = "No Markdown output was found under raw_output."
     except Exception as exc:
         status = {
             "tool": TOOL_NAME,

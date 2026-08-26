@@ -1,7 +1,0 @@
-{
-  "tool": "pymupdf4llm",
-  "status": "success",
-  "seconds": 33.19,
-  "output": "pdf_parser_experiments/全是变化的信号：2025私域趋势白皮书暨年度调研报告/pymupdf4llm/output.md",
-  "cleaned_text": "pdf_parser_experiments/全是变化的信号：2025私域趋势白皮书暨年度调研报告/pymupdf4llm/cleaned_text.md"
-}
