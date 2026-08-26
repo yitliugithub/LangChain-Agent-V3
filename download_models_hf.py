@@ -35,6 +35,7 @@ if __name__ == '__main__':
     mineru_patterns = [
         "models/Layout/LayoutLMv3/*",
         "models/Layout/YOLO/*",
+        "models/OCR/paddleocr_torch/*",
         "models/MFD/YOLO/*",
         "models/MFR/unimernet_small/*",
         "models/TabRec/TableMaster/*",
