@@ -94,7 +94,10 @@ def build_magic_pdf_config(config_path: Path):
     config = {
         "device-mode": "cpu",
         "layout-config": {
-            "model": "layoutlmv3",
+            # layoutlmv3 depends on detectron2, which is brittle on macOS.
+            # doclayout_yolo uses the ultralytics stack that magic-pdf[full]
+            # already installs more reliably.
+            "model": "doclayout_yolo",
         },
         "formula-config": {
             "mfd_model": "yolo_v8_mfd",

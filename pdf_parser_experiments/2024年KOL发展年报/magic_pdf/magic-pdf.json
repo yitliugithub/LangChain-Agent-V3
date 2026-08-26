@@ -1,0 +1,18 @@
+{
+  "device-mode": "cpu",
+  "layout-config": {
+    "model": "layoutlmv3"
+  },
+  "formula-config": {
+    "mfd_model": "yolo_v8_mfd",
+    "mfr_model": "unimernet_small",
+    "enable": false
+  },
+  "table-config": {
+    "model": "rapid_table",
+    "enable": true,
+    "max_time": 400
+  },
+  "latex-delimiter-config": null,
+  "llm-aided-config": null
+}

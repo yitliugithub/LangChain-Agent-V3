@@ -1,50 +1,95 @@
 Command:
 magic-pdf -p /Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf -o pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output -m auto -l ch
 
-warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
-/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/requests/__init__.py:113: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (7.6.0)/charset_normalizer (3.4.9) doesn't match a supported version!
-  warnings.warn(
-2026-08-26 11:42:32.736 | ERROR    | magic_pdf.tools.cli:parse_doc:134 - /Users/liuyiting/magic-pdf.json not found
+Config: /Users/liuyiting/PycharmProjects/pythonProject2/pdf_parser_experiments/2024年KOL发展年报/magic_pdf/magic-pdf.json
+
+2026-08-26 12:26:08.016 | WARNING  | magic_pdf.libs.config_reader:get_latex_delimiter_config:132 - 'latex-delimiter-config' not found in /Users/liuyiting/PycharmProjects/pythonProject2/pdf_parser_experiments/2024年KOL发展年报/magic_pdf/magic-pdf.json, use 'None' as default
+2026-08-26 12:26:09.856 | INFO     | magic_pdf.data.dataset:__init__:157 - lang: ch
+Cannot set gray non-stroke color because /'P2008' is an invalid float value
+Cannot set gray non-stroke color because /'P2029' is an invalid float value
+Cannot set gray non-stroke color because /'P2050' is an invalid float value
+Cannot set gray non-stroke color because /'P2071' is an invalid float value
+Cannot set gray non-stroke color because /'P2092' is an invalid float value
+Cannot set gray non-stroke color because /'P2113' is an invalid float value
+Cannot set gray non-stroke color because /'P2134' is an invalid float value
+Cannot set gray non-stroke color because /'P2155' is an invalid float value
+Cannot set gray non-stroke color because /'P2178' is an invalid float value
+Cannot set gray non-stroke color because /'P1570' is an invalid float value
+Cannot set gray non-stroke color because /'P1591' is an invalid float value
+Cannot set gray non-stroke color because /'P1612' is an invalid float value
+Cannot set gray non-stroke color because /'P1633' is an invalid float value
+Cannot set gray non-stroke color because /'P1654' is an invalid float value
+Cannot set gray non-stroke color because /'P1675' is an invalid float value
+Cannot set gray non-stroke color because /'P1696' is an invalid float value
+Cannot set gray non-stroke color because /'P1717' is an invalid float value
+Cannot set gray non-stroke color because /'P26' is an invalid float value
+Cannot set gray non-stroke color because /'P48' is an invalid float value
+Cannot set gray non-stroke color because /'P73' is an invalid float value
+Cannot set gray non-stroke color because /'P75' is an invalid float value
+Cannot set gray non-stroke color because /'P77' is an invalid float value
+Cannot set gray non-stroke color because /'P887' is an invalid float value
+Cannot set gray non-stroke color because /'P908' is an invalid float value
+Cannot set gray non-stroke color because /'P932' is an invalid float value
+Cannot set gray non-stroke color because /'P954' is an invalid float value
+Cannot set gray non-stroke color because /'P975' is an invalid float value
+Cannot set gray non-stroke color because /'P1001' is an invalid float value
+Cannot set gray non-stroke color because /'P1260' is an invalid float value
+Cannot set gray non-stroke color because /'P1262' is an invalid float value
+Cannot set gray non-stroke color because /'P1264' is an invalid float value
+Cannot set gray non-stroke color because /'P1266' is an invalid float value
+Cannot set gray non-stroke color because /'P1272' is an invalid float value
+Cannot set gray non-stroke color because /'P1278' is an invalid float value
+Cannot set gray non-stroke color because /'P1284' is an invalid float value
+Cannot set gray non-stroke color because /'P1286' is an invalid float value
+Cannot set gray non-stroke color because /'P1288' is an invalid float value
+Cannot set gray non-stroke color because /'P1294' is an invalid float value
+2026-08-26 12:26:13.846 | INFO     | magic_pdf.libs.pdf_check:detect_invalid_chars:67 - cid_count: 0, text_len: 4547, cid_chars_radio: 0.0
+2026-08-26 12:26:20.355 | INFO     | magic_pdf.model.doc_analyze_by_custom_model:doc_analyze:162 - Batch 1/1: 47 pages/47 pages
+2026-08-26 12:26:20.357 | WARNING  | magic_pdf.libs.config_reader:get_local_models_dir:62 - 'models-dir' not found in /Users/liuyiting/PycharmProjects/pythonProject2/pdf_parser_experiments/2024年KOL发展年报/magic_pdf/magic-pdf.json, use '/tmp/models' as default
+2026-08-26 12:26:20.358 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:68 - DocAnalysis init, this may take some times, layout_model: layoutlmv3, apply_formula: False, apply_ocr: True, apply_table: True, table_model: rapid_table, lang: None
+2026-08-26 12:26:20.358 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:82 - using device: cpu
+2026-08-26 12:26:20.358 | INFO     | magic_pdf.model.pdf_extract_kit:__init__:86 - using models_dir: /tmp/models
+2026-08-26 12:26:20.924 | ERROR    | magic_pdf.tools.cli:parse_doc:134 - No module named 'detectron2'
 Traceback (most recent call last):
 
-  File "/opt/miniconda3/envs/myenv/bin/magic-pdf", line 6, in <module>
+  File "/opt/miniconda3/envs/mineru_magic/bin/magic-pdf", line 6, in <module>
     sys.exit(cli())
     │   │    └ <Command cli>
     │   └ <built-in function exit>
     └ <module 'sys' (built-in)>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 1569, in __call__
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 1569, in __call__
     return self.main(*args, **kwargs)
            │    │     │       └ {}
            │    │     └ ()
-           │    └ <function Command.main at 0x1014c34c0>
+           │    └ <function Command.main at 0x1035acb80>
            └ <Command cli>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 1490, in main
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 1490, in main
     rv = self.invoke(ctx)
-         │    │      └ <click.core.Context object at 0x100ee5490>
-         │    └ <function Command.invoke at 0x1014c31a0>
+         │    │      └ <click.core.Context object at 0x102ef3c10>
+         │    └ <function Command.invoke at 0x1035aca60>
          └ <Command cli>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 1353, in invoke
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 1353, in invoke
     return ctx.invoke(self.callback, **ctx.params)
            │   │      │    │           │   └ {'path': '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf', 'output_dir': 'pdf_parser_experiments/2...
-           │   │      │    │           └ <click.core.Context object at 0x100ee5490>
-           │   │      │    └ <function cli at 0x10ccd5620>
+           │   │      │    │           └ <click.core.Context object at 0x102ef3c10>
+           │   │      │    └ <function cli at 0x136f1f760>
            │   │      └ <Command cli>
-           │   └ <function Context.invoke at 0x1014c23e0>
-           └ <click.core.Context object at 0x100ee5490>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/click/core.py", line 907, in invoke
+           │   └ <function Context.invoke at 0x10359bd90>
+           └ <click.core.Context object at 0x102ef3c10>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/click/core.py", line 907, in invoke
     return callback(*args, **kwargs)
            │         │       └ {'path': '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf', 'output_dir': 'pdf_parser_experiments/2...
            │         └ ()
-           └ <function cli at 0x10ccd5620>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/cli.py", line 155, in cli
+           └ <function cli at 0x136f1f760>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/cli.py", line 155, in cli
     parse_doc(Path(path))
     │         │    └ '/Users/liuyiting/PycharmProjects/pythonProject2/rag_data/2024年KOL发展年报.pdf'
     │         └ <class 'pathlib.Path'>
-    └ <function cli.<locals>.parse_doc at 0x100ec18a0>
-> File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/cli.py", line 121, in parse_doc
+    └ <function cli.<locals>.parse_doc at 0x136f1f2e0>
+> File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/cli.py", line 121, in parse_doc
     do_parse(
-    └ <function do_parse at 0x10ccd4c20>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/common.py", line 284, in do_parse
+    └ <function do_parse at 0x136f1ecb0>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/common.py", line 284, in do_parse
     _do_parse(output_dir, pdf_file_name, pdf_bytes_or_dataset, model_list, parse_method, debug_able, start_page_id=start_page_id, end_page_id=end_page_id, lang=lang, layout_model=layout_model, formula_enable=formula_enable, table_enable=table_enable,  f_draw_span_bbox=f_draw_span_bbox, f_draw_layout_bbox=f_draw_layout_bbox, f_dump_md=f_dump_md, f_dump_middle_json=f_dump_middle_json, f_dump_model_json=f_dump_model_json, f_dump_orig_pdf=f_dump_orig_pdf, f_dump_content_list=f_dump_content_list, f_make_md_mode=f_make_md_mode, f_draw_model_bbox=f_draw_model_bbox, f_draw_line_sort_bbox=f_draw_line_sort_bbox, f_draw_char_bbox=f_draw_char_bbox)
     │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 │                                        │                                       └ False
     │         │           │              │                     │           │             │                         │                          │                 │                  │                            │                            │                               │                                    │                             │                             │                                     │                                  │                                    │                                   │                                 │                                        └ False
@@ -69,20 +114,77 @@ Traceback (most recent call last):
     │         │           │              └ b'%PDF-1.7\n%\xa1\xb3\xc5\xd7\n1 0 obj\r\n<</Type/Catalog/Pages 2 0 R /Lang(zh)/StructTreeRoot 2847 0 R /Outlines 2799 0 R /M...
     │         │           └ '2024年KOL发展年报'
     │         └ 'pdf_parser_experiments/2024年KOL发展年报/magic_pdf/raw_output'
-    └ <function _do_parse at 0x107c63240>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/tools/common.py", line 95, in _do_parse
-    from magic_pdf.operators.models import InferenceResult
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/operators/__init__.py", line 6, in <module>
-    from magic_pdf.operators.pipes import PipeResult
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/operators/pipes.py", line 9, in <module>
-    from magic_pdf.dict2md.ocr_mkcontent import union_make
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/dict2md/ocr_mkcontent.py", line 163, in <module>
-    latex_delimiters_config = get_latex_delimiter_config()
-                              └ <function get_latex_delimiter_config at 0x10ccd4860>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/libs/config_reader.py", line 129, in get_latex_delimiter_config
-    config = read_config()
-             └ <function read_config at 0x10ccd4180>
-  File "/opt/miniconda3/envs/myenv/lib/python3.11/site-packages/magic_pdf/libs/config_reader.py", line 23, in read_config
-    raise FileNotFoundError(f'{config_file} not found')
+    └ <function _do_parse at 0x136f1ec20>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/tools/common.py", line 119, in _do_parse
+    infer_result = ds.apply(
+                   │  └ <function PymuDocDataset.apply at 0x120558280>
+                   └ <magic_pdf.data.dataset.PymuDocDataset object at 0x168ee3850>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/data/dataset.py", line 214, in apply
+    return proc(self, *args, **kwargs)
+           │    │      │       └ {'ocr': False, 'lang': 'ch', 'layout_model': None, 'formula_enable': None, 'table_enable': None}
+           │    │      └ ()
+           │    └ <magic_pdf.data.dataset.PymuDocDataset object at 0x168ee3850>
+           └ <function doc_analyze at 0x136f1e9e0>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 163, in doc_analyze
+    result = may_batch_image_analyze(batch_image, ocr, show_log,layout_model, formula_enable, table_enable)
+             │                       │            │    │        │             │               └ None
+             │                       │            │    │        │             └ None
+             │                       │            │    │        └ None
+             │                       │            │    └ False
+             │                       │            └ False
+             │                       └ [(array([[[ 22,  23,  28],
+             │                                 [ 22,  23,  28],
+             │                                 [ 22,  23,  28],
+             │                                 ...,
+             │                                 [106,  82,  99],
+             │                                 [1...
+             └ <function may_batch_image_analyze at 0x136f1eb00>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 288, in may_batch_image_analyze
+    results = batch_model(images_with_extra_info)
+              │           └ [(array([[[ 22,  23,  28],
+              │                     [ 22,  23,  28],
+              │                     [ 22,  23,  28],
+              │                     ...,
+              │                     [106,  82,  99],
+              │                     [1...
+              └ <magic_pdf.model.batch_analyze.BatchAnalyze object at 0x1696e21d0>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/batch_analyze.py", line 33, in __call__
+    self.model = self.model_manager.get_model(
+    │            │    │             └ <function ModelSingleton.get_model at 0x136f1e950>
+    │            │    └ <magic_pdf.model.doc_analyze_by_custom_model.ModelSingleton object at 0x1696e2230>
+    │            └ <magic_pdf.model.batch_analyze.BatchAnalyze object at 0x1696e21d0>
+    └ <magic_pdf.model.batch_analyze.BatchAnalyze object at 0x1696e21d0>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 46, in get_model
+    self._models[key] = custom_model_init(
+    │    │       │      └ <function custom_model_init at 0x12129ee60>
+    │    │       └ (True, False, None, None, None, None)
+    │    └ {}
+    └ <magic_pdf.model.doc_analyze_by_custom_model.ModelSingleton object at 0x1696e2230>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/doc_analyze_by_custom_model.py", line 111, in custom_model_init
+    custom_model = CustomPEKModel(**model_input)
+                   │                └ {'ocr': True, 'show_log': False, 'models_dir': '/tmp/models', 'device': 'cpu', 'table_config': {'model': 'rapid_table', 'enab...
+                   └ <class 'magic_pdf.model.pdf_extract_kit.CustomPEKModel'>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/pdf_extract_kit.py", line 118, in __init__
+    self.layout_model = atom_model_manager.get_atom_model(
+    │                   │                  └ <function AtomModelSingleton.get_atom_model at 0x169010af0>
+    │                   └ <magic_pdf.model.sub_modules.model_init.AtomModelSingleton object at 0x1696e1180>
+    └ <magic_pdf.model.pdf_extract_kit.CustomPEKModel object at 0x1696e2140>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/model_init.py", line 150, in get_atom_model
+    self._models[key] = atom_model_init(model_name=atom_model_name, **kwargs)
+    │    │       │      │                          │                  └ {'layout_model_name': 'layoutlmv3', 'layout_weights': '/tmp/models/Layout/LayoutLMv3/model_final.pth', 'layout_config_file': ...
+    │    │       │      │                          └ 'layout'
+    │    │       │      └ <function atom_model_init at 0x1690109d0>
+    │    │       └ ('layout', 'layoutlmv3')
+    │    └ {}
+    └ <magic_pdf.model.sub_modules.model_init.AtomModelSingleton object at 0x1696e1180>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/model_init.py", line 157, in atom_model_init
+    atom_model = layout_model_init(
+                 └ <function layout_model_init at 0x169010790>
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/model_init.py", line 80, in layout_model_init
+    from magic_pdf.model.sub_modules.layout.layoutlmv3.model_init import Layoutlmv3_Predictor
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/layout/layoutlmv3/model_init.py", line 1, in <module>
+    from .visualizer import Visualizer
+  File "/opt/miniconda3/envs/mineru_magic/lib/python3.10/site-packages/magic_pdf/model/sub_modules/layout/layoutlmv3/visualizer.py", line 16, in <module>
+    from detectron2.data import MetadataCatalog
 
-FileNotFoundError: /Users/liuyiting/magic-pdf.json not found
+ModuleNotFoundError: No module named 'detectron2'
