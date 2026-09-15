@@ -1,0 +1,24 @@
+{
+  "selected_term_count": 58,
+  "manual_extra_terms": [
+    "内容"
+  ],
+  "duplicate_count": 0,
+  "jieba_changed_segmentation_count": 57,
+  "jieba_validation_failures": {},
+  "nested_term_pairs": [
+    [
+      "单品",
+      "大单品"
+    ],
+    [
+      "复购",
+      "复购率"
+    ]
+  ],
+  "nested_terms_policy": "Retained because both terms were manually selected and are valid domain concepts; retrieval tokenization must be checked in context.",
+  "dictionary_format": "one UTF-8 term per line; compatible with jieba.load_userdict",
+  "evaluation_data_used": false,
+  "dictionary_file": "/Users/liuyiting/PycharmProjects/pythonProject2/resources/jieba_dictionary/jieba_domain_dict.txt",
+  "selected_terms_file": "/Users/liuyiting/PycharmProjects/pythonProject2/resources/jieba_dictionary/selected_terms.json"
+}

@@ -1,0 +1,45 @@
+{
+  "accepted_questions": 29,
+  "rejected_questions": 1,
+  "route_distribution": {
+    "clear": 10,
+    "expandable": 10,
+    "ambiguous": 9
+  },
+  "source_question_count": 10,
+  "source_document_count": 7,
+  "accepted_query_ids": [
+    "QH01-1",
+    "QH01-2",
+    "QH01-3",
+    "QH02-1",
+    "QH02-2",
+    "QH02-3",
+    "QH03-1",
+    "QH03-2",
+    "QH03-3",
+    "QH04-1",
+    "QH04-2",
+    "QH04-3",
+    "QH05-1",
+    "QH05-2",
+    "QH05-3",
+    "QH06-1",
+    "QH06-2",
+    "QH07-1",
+    "QH07-2",
+    "QH07-3",
+    "QH08-1",
+    "QH08-2",
+    "QH08-3",
+    "QH09-1",
+    "QH09-2",
+    "QH09-3",
+    "QH10-1",
+    "QH10-2",
+    "QH10-3"
+  ],
+  "rejected_query_ids": [
+    "QH06-3"
+  ]
+}

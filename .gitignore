@@ -1,4 +1,24 @@
+# Secrets
 .env
+.env.*
+
+# Python and IDE
 __pycache__/
+*.py[cod]
 .idea/
 .ipynb_checkpoints/
+.DS_Store
+
+# Runtime data and generated artifacts
+storage/
+data/
+artifacts/
+evaluation/results/
+evaluation/candidates/
+resources/jieba_dictionary_candidates/
+notebooks/
+
+# User uploads: keep only documentation and the blank template
+uploads/*
+!uploads/README.md
+!uploads/research_input_template.xlsx

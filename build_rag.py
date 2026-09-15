@@ -1,110 +1,117 @@
 import hashlib
-import os
+import json
 import re
+from pathlib import Path
 
-INPUT_DIR = "normalized_data"
-CHROMA_DIR = "chroma_db"
-COLLECTION_NAME = "marketing_knowledge"
-EMBEDDING_MODEL_NAME = (
-    "sentence-transformers/"
-    "paraphrase-multilingual-MiniLM-L12-v2"
+import numpy as np
+
+from rag_config import (
+    CHROMA_DIR,
+    CHUNK_METHOD,
+    CHUNK_TOKENIZER_MODEL,
+    COLLECTION_NAME,
+    EMBEDDING_MODEL,
+    EMBEDDING_PASSAGE_PREFIX,
+    MAX_CHUNK_TOKENS,
+    MIN_CHUNK_TOKENS,
+    NORMALIZED_DATA_DIR,
 )
-
-# Prototype heuristic parameters. This demo uses character length rather than
-# token length so the chunking behavior stays simple and easy to explain.
-MAX_CHUNK_CHARS = 1000
-MIN_CHUNK_CHARS = 200
-
-_embedding_model = None
+from rag_models import E5Embedder
 
 
-def get_embedding_model():
-    global _embedding_model
-    if _embedding_model is None:
-        from sentence_transformers import SentenceTransformer
+def get_chunk_tokenizer():
+    from transformers import AutoTokenizer
 
-        print("正在加载 Embedding Model...")
-        _embedding_model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-        print("Embedding Model 加载完成。")
-    return _embedding_model
+    tokenizer = AutoTokenizer.from_pretrained(CHUNK_TOKENIZER_MODEL)
+    tokenizer.model_max_length = 10**9
+    return tokenizer
 
 
-def get_collection(rebuild: bool = False):
-    import chromadb
-
-    client = chromadb.PersistentClient(path=CHROMA_DIR)
-
-    if rebuild:
-        try:
-            client.delete_collection(COLLECTION_NAME)
-            print("旧知识库已删除。")
-        except Exception:
-            pass
-
-    try:
-        return client.get_collection(name=COLLECTION_NAME)
-    except Exception:
-        return client.create_collection(
-            name=COLLECTION_NAME,
-            metadata={"hnsw:space": "cosine"},
-        )
+def count_tokens(text, tokenizer):
+    return len(tokenizer.encode(text, add_special_tokens=False))
 
 
-def load_markdown(file_path: str) -> str:
-    with open(file_path, "r", encoding="utf-8") as file:
-        return file.read()
+def token_fallback_split(text, max_tokens, tokenizer):
+    token_ids = tokenizer.encode(text, add_special_tokens=False)
+    chunks = []
+    for start in range(0, len(token_ids), max_tokens):
+        part = tokenizer.decode(
+            token_ids[start:start + max_tokens],
+            skip_special_tokens=True,
+        ).strip()
+        if part:
+            chunks.append(part)
+    return chunks
 
 
-def split_by_headings(text: str):
-    """
-    Heading-aware section split.
+def heading_text(line):
+    match = re.match(r"^(#{1,6})\s+(.+)$", line.strip())
+    return match.group(2).strip() if match else None
 
-    Blank lines are intentionally preserved. Paragraph chunking later depends on
-    the original Markdown blank-line boundary: re.split(r"\\n\\s*\\n", text).
-    """
+
+def split_by_headings(text):
     sections = []
     current_heading = "Document"
-    current_content = []
+    current_lines = []
 
-    for raw_line in text.splitlines():
-        heading_line = raw_line.strip()
-
-        if re.match(r"^#{1,6}\s+", heading_line):
-            section_text = "\n".join(current_content).strip()
-            if section_text:
-                sections.append(
-                    {
-                        "heading": current_heading,
-                        "text": section_text,
-                    }
-                )
-
-            current_heading = re.sub(r"^#{1,6}\s+", "", heading_line).strip()
-            current_content = []
+    for line in text.splitlines():
+        heading = heading_text(line)
+        if heading:
+            content = "\n".join(current_lines).strip()
+            if content:
+                sections.append({"section": current_heading, "text": content})
+            current_heading = heading
+            current_lines = []
         else:
-            current_content.append(raw_line.rstrip())
+            current_lines.append(line.rstrip())
 
-    section_text = "\n".join(current_content).strip()
-    if section_text:
-        sections.append(
-            {
-                "heading": current_heading,
-                "text": section_text,
-            }
-        )
-
+    content = "\n".join(current_lines).strip()
+    if content:
+        sections.append({"section": current_heading, "text": content})
     return sections
 
 
-def split_paragraphs(text: str):
-    return [
-        paragraph.strip()
-        for paragraph in re.split(r"\n\s*\n", text)
-        if paragraph.strip()
-    ]
+def is_table_line(line):
+    stripped = line.strip()
+    return stripped.startswith("|") and stripped.endswith("|")
 
 
-def split_sentences(text: str):
+def split_section_into_blocks(text):
+    blocks = []
+    paragraph_lines = []
+    table_lines = []
+
+    def flush_paragraph():
+        if paragraph_lines:
+            value = "\n".join(paragraph_lines).strip()
+            if value:
+                blocks.append({"type": "paragraph", "text": value})
+            paragraph_lines.clear()
+
+    def flush_table():
+        if table_lines:
+            value = "\n".join(table_lines).strip()
+            if value:
+                blocks.append({"type": "table", "text": value})
+            table_lines.clear()
+
+    for line in text.splitlines():
+        if is_table_line(line):
+            flush_paragraph()
+            table_lines.append(line)
+        else:
+            flush_table()
+            if line.strip():
+                paragraph_lines.append(line)
+            else:
+                flush_paragraph()
+
+    flush_paragraph()
+    flush_table()
+    return blocks
+
+
+def split_sentences(text):
     return [
         sentence.strip()
         for sentence in re.split(r"(?<=[。！？.!?])\s*", text)
@@ -112,183 +119,404 @@ def split_sentences(text: str):
     ]
 
 
-def hard_split(text: str):
+def split_oversized_table(text, max_tokens, tokenizer):
+    lines = text.splitlines()
+    header = lines[:2] if len(lines) >= 2 else []
+    rows = lines[2:] if len(lines) >= 2 else lines
     chunks = []
-    start = 0
+    current_rows = []
 
-    while start < len(text):
-        chunk = text[start:start + MAX_CHUNK_CHARS].strip()
-        if chunk:
-            chunks.append(chunk)
-        start += MAX_CHUNK_CHARS
-
-    return chunks
-
-
-def recursive_chunk(text: str):
-    if len(text) <= MAX_CHUNK_CHARS:
-        return [text]
-
-    paragraphs = split_paragraphs(text)
-    if len(paragraphs) > 1:
-        return pack_units(paragraphs, separator="\n\n")
-
-    sentences = split_sentences(text)
-    if len(sentences) > 1:
-        return pack_units(sentences, separator="")
-
-    return hard_split(text)
-
-
-def pack_units(units, separator: str):
-    chunks = []
-    current_chunk = ""
-
-    for unit in units:
-        candidate = (
-            f"{current_chunk}{separator}{unit}".strip()
-            if current_chunk
-            else unit
-        )
-
-        if len(candidate) <= MAX_CHUNK_CHARS:
-            current_chunk = candidate
+    for row in rows:
+        candidate = "\n".join(header + current_rows + [row])
+        if count_tokens(candidate, tokenizer) <= max_tokens:
+            current_rows.append(row)
             continue
 
-        if current_chunk:
-            chunks.append(current_chunk)
-
-        if len(unit) > MAX_CHUNK_CHARS:
-            chunks.extend(recursive_chunk(unit))
-            current_chunk = ""
+        if current_rows:
+            chunks.append(
+                {"type": "table_split", "text": "\n".join(header + current_rows)}
+            )
+            current_rows = [row]
         else:
-            current_chunk = unit
+            chunks.extend(
+                {"type": "table_token_fallback", "text": part}
+                for part in token_fallback_split(row, max_tokens, tokenizer)
+            )
 
-    if current_chunk:
-        chunks.append(current_chunk)
+    if current_rows:
+        chunks.append(
+            {"type": "table_split", "text": "\n".join(header + current_rows)}
+        )
+    return chunks
+
+
+def sentence_distances(sentences, embedder):
+    if len(sentences) < 2:
+        return []
+
+    embeddings = embedder.encode(
+        [EMBEDDING_PASSAGE_PREFIX + sentence for sentence in sentences]
+    )
+    similarities = np.sum(embeddings[:-1] * embeddings[1:], axis=1)
+    return [float(1 - similarity) for similarity in similarities]
+
+
+def split_index_by_semantic_distance(
+    sentences,
+    distances,
+    start,
+    end,
+    min_tokens,
+    tokenizer,
+):
+    candidates = []
+    for split_index in range(start + 1, end):
+        left_text = "".join(sentences[start:split_index])
+        right_text = "".join(sentences[split_index:end])
+        if count_tokens(left_text, tokenizer) < min_tokens:
+            continue
+        if right_text and count_tokens(right_text, tokenizer) < min_tokens:
+            continue
+        candidates.append((split_index, distances[split_index - 1]))
+
+    if candidates:
+        return max(candidates, key=lambda item: item[1])[0]
+
+    fallback_candidates = []
+    for split_index in range(start + 1, end):
+        left_text = "".join(sentences[start:split_index])
+        if count_tokens(left_text, tokenizer) >= min_tokens:
+            fallback_candidates.append((split_index, distances[split_index - 1]))
+
+    if fallback_candidates:
+        return max(fallback_candidates, key=lambda item: item[1])[0]
+    return end - 1
+
+
+def semantic_sentence_split(
+    sentences,
+    max_tokens,
+    min_tokens,
+    tokenizer,
+    embedder,
+):
+    distances = sentence_distances(sentences, embedder)
+    units = []
+    start = 0
+    end = 1
+
+    while end <= len(sentences):
+        candidate = "".join(sentences[start:end])
+        if count_tokens(candidate, tokenizer) <= max_tokens:
+            end += 1
+            continue
+
+        split_index = split_index_by_semantic_distance(
+            sentences,
+            distances,
+            start,
+            end - 1,
+            min_tokens,
+            tokenizer,
+        )
+        text = "".join(sentences[start:split_index]).strip()
+        if text:
+            units.append({"type": "semantic_sentence_group", "text": text})
+        start = split_index
+        end = start + 1
+
+    remainder = "".join(sentences[start:]).strip()
+    if remainder:
+        units.append({"type": "semantic_sentence_group", "text": remainder})
+    return units
+
+
+def split_oversized_unit(
+    unit,
+    max_tokens,
+    min_tokens,
+    tokenizer,
+    embedder,
+):
+    if unit["type"] == "table":
+        return split_oversized_table(unit["text"], max_tokens, tokenizer)
+
+    sentences = split_sentences(unit["text"])
+    if len(sentences) > 1:
+        return semantic_sentence_split(
+            sentences,
+            max_tokens,
+            min_tokens,
+            tokenizer,
+            embedder,
+        )
+    return [
+        {"type": "token_fallback", "text": part}
+        for part in token_fallback_split(unit["text"], max_tokens, tokenizer)
+    ]
+
+
+def create_units(section_text, max_tokens, min_tokens, tokenizer, embedder):
+    raw_units = []
+    for block in split_section_into_blocks(section_text):
+        if block["type"] == "table":
+            raw_units.append(block)
+            continue
+
+        sentences = split_sentences(block["text"])
+        if len(sentences) > 1:
+            raw_units.extend(
+                {"type": "sentence", "text": sentence}
+                for sentence in sentences
+            )
+        else:
+            raw_units.append(block)
+
+    units = []
+    for unit in raw_units:
+        if count_tokens(unit["text"], tokenizer) <= max_tokens:
+            units.append(unit)
+        else:
+            units.extend(
+                split_oversized_unit(
+                    unit,
+                    max_tokens,
+                    min_tokens,
+                    tokenizer,
+                    embedder,
+                )
+            )
+    return units
+
+
+def unit_distances(units, embedder):
+    distances = [None] * max(0, len(units) - 1)
+    pairs = []
+    positions = []
+    for index in range(len(units) - 1):
+        if units[index]["type"] == "table" or units[index + 1]["type"] == "table":
+            continue
+        pairs.append(
+            (
+                EMBEDDING_PASSAGE_PREFIX + units[index]["text"],
+                EMBEDDING_PASSAGE_PREFIX + units[index + 1]["text"],
+            )
+        )
+        positions.append(index)
+
+    if not pairs:
+        return distances
+
+    flattened = [text for pair in pairs for text in pair]
+    embeddings = embedder.encode(flattened)
+    for pair_number, position in enumerate(positions):
+        left = embeddings[pair_number * 2]
+        right = embeddings[pair_number * 2 + 1]
+        distances[position] = 1 - float(np.sum(left * right))
+    return distances
+
+
+def select_semantic_split(units, distances, start, end, min_tokens, tokenizer):
+    candidates = []
+    for split_index in range(start + 1, end):
+        distance = distances[split_index - 1]
+        if distance is None:
+            continue
+        left = "\n\n".join(unit["text"] for unit in units[start:split_index])
+        right = "\n\n".join(unit["text"] for unit in units[split_index:end])
+        if count_tokens(left, tokenizer) < min_tokens:
+            continue
+        if right and count_tokens(right, tokenizer) < min_tokens:
+            continue
+        candidates.append((split_index, distance))
+
+    if candidates:
+        return max(candidates, key=lambda item: item[1])[0]
+
+    for split_index in range(end - 1, start, -1):
+        left = "\n\n".join(unit["text"] for unit in units[start:split_index])
+        if count_tokens(left, tokenizer) >= min_tokens:
+            return split_index
+    return max(start + 1, end - 1)
+
+
+def make_chunk(section, units, boundary_distance, index, tokenizer):
+    content = "\n\n".join(unit["text"] for unit in units).strip()
+    text = f"Section: {section}\n\n{content}".strip()
+    return {
+        "chunk_index": index,
+        "section": section,
+        "token_count": count_tokens(text, tokenizer),
+        "block_types": sorted({unit["type"] for unit in units}),
+        "semantic_boundary_distance": boundary_distance,
+        "text": text,
+    }
+
+
+def create_chunks_from_markdown(markdown_text, tokenizer, embedder):
+    chunks = []
+    for section in split_by_headings(markdown_text):
+        name = section["section"]
+        prefix_tokens = count_tokens(f"Section: {name}\n\n", tokenizer)
+        content_limit = max(1, MAX_CHUNK_TOKENS - prefix_tokens)
+        units = create_units(
+            section["text"],
+            content_limit,
+            MIN_CHUNK_TOKENS,
+            tokenizer,
+            embedder,
+        )
+        if not units:
+            continue
+        distances = unit_distances(units, embedder)
+        start = 0
+        end = 1
+
+        while end <= len(units):
+            candidate_units = units[start:end]
+            candidate = make_chunk(name, candidate_units, None, 0, tokenizer)
+            if candidate["token_count"] <= MAX_CHUNK_TOKENS:
+                end += 1
+                continue
+
+            split_index = select_semantic_split(
+                units,
+                distances,
+                start,
+                end - 1,
+                MIN_CHUNK_TOKENS,
+                tokenizer,
+            )
+            boundary = distances[split_index - 1]
+            chunks.append(
+                make_chunk(
+                    name,
+                    units[start:split_index],
+                    boundary,
+                    len(chunks),
+                    tokenizer,
+                )
+            )
+            start = split_index
+            end = start + 1
+
+        if start < len(units):
+            chunks.append(
+                make_chunk(name, units[start:], None, len(chunks), tokenizer)
+            )
 
     return chunks
 
 
-def merge_small_chunks(chunks):
-    if not chunks:
-        return []
-
-    merged = []
-    for chunk in chunks:
-        if len(chunk) < MIN_CHUNK_CHARS and merged:
-            candidate = merged[-1] + "\n\n" + chunk
-            if len(candidate) <= MAX_CHUNK_CHARS:
-                merged[-1] = candidate
-            else:
-                merged.append(chunk)
-        else:
-            merged.append(chunk)
-
-    return merged
+def create_chunk_id(source, section, index, text):
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
+    raw = f"{source}|{section}|{index}|{digest}"
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def create_chunks_from_markdown(markdown_text):
-    sections = split_by_headings(markdown_text)
-    final_chunks = []
+def recreate_collection():
+    import chromadb
 
-    for section in sections:
-        heading = section["heading"]
-        section_text = section["text"]
-        chunks = merge_small_chunks(recursive_chunk(section_text))
-
-        for chunk in chunks:
-            final_chunks.append(
-                {
-                    "section": heading,
-                    "text": f"Section: {heading}\n\n{chunk}",
-                }
-            )
-
-    return final_chunks
-
-
-def create_embeddings(texts):
-    model = get_embedding_model()
-    return model.encode(
-        texts,
-        normalize_embeddings=True,
-        show_progress_bar=False,
+    client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+    existing = {
+        item.name if hasattr(item, "name") else str(item)
+        for item in client.list_collections()
+    }
+    if COLLECTION_NAME in existing:
+        client.delete_collection(COLLECTION_NAME)
+    return client.create_collection(
+        name=COLLECTION_NAME,
+        metadata={
+            "hnsw:space": "cosine",
+            "embedding_model": EMBEDDING_MODEL,
+            "chunk_method": CHUNK_METHOD,
+        },
     )
-
-
-def create_chunk_id(source, section, index):
-    raw = f"{source}|{section}|{index}"
-    return hashlib.md5(raw.encode("utf-8")).hexdigest()
-
-
-def index_markdown(file_path, collection):
-    filename = os.path.basename(file_path)
-    print(f"\n正在处理：{filename}")
-
-    markdown_text = load_markdown(file_path)
-    chunks = create_chunks_from_markdown(markdown_text)
-    print(f"生成 {len(chunks)} 个 Chunks。")
-
-    if not chunks:
-        return
-
-    texts = [chunk["text"] for chunk in chunks]
-    embeddings = create_embeddings(texts)
-
-    ids = []
-    metadatas = []
-    for index, chunk in enumerate(chunks):
-        ids.append(create_chunk_id(filename, chunk["section"], index))
-        metadatas.append(
-            {
-                "source": filename,
-                "section": chunk["section"],
-                "chunk_index": index,
-                "chunk_method": "heading_recursive",
-            }
-        )
-
-    collection.add(
-        ids=ids,
-        documents=texts,
-        embeddings=[embedding.tolist() for embedding in embeddings],
-        metadatas=metadatas,
-    )
-
-    print("\n========== Chunk Preview ==========")
-    for index, chunk in enumerate(chunks[:10], start=1):
-        print(f"\n--- Chunk {index} ---")
-        print(f"Section: {chunk['section']}")
-        print(chunk["text"][:500])
-    print("\n===================================")
 
 
 def build_knowledge_base():
-    if not os.path.exists(INPUT_DIR):
-        raise FileNotFoundError(f"找不到目录：{INPUT_DIR}")
-
-    markdown_files = [
-        filename
-        for filename in sorted(os.listdir(INPUT_DIR))
-        if filename.lower().endswith(".md")
-    ]
-
+    markdown_files = sorted(NORMALIZED_DATA_DIR.glob("*.md"))
     if not markdown_files:
-        print("normalized_data 中没有 Markdown 文件。")
-        return
+        raise FileNotFoundError(
+            f"{NORMALIZED_DATA_DIR} 中没有Markdown；请先运行 python preprocess_pdf.py"
+        )
 
-    collection = get_collection(rebuild=True)
-    print(f"找到 {len(markdown_files)} 个 Markdown 文件。")
+    print(f"找到 {len(markdown_files)} 个标准化Markdown文件。")
+    print(f"Chunking: max={MAX_CHUNK_TOKENS}, min={MIN_CHUNK_TOKENS}")
+    print(f"Embedding: {EMBEDDING_MODEL}")
+    tokenizer = get_chunk_tokenizer()
+    embedder = E5Embedder(EMBEDDING_MODEL)
 
-    for filename in markdown_files:
-        file_path = os.path.join(INPUT_DIR, filename)
-        try:
-            index_markdown(file_path, collection)
-        except Exception as exc:
-            print(f"处理 {filename} 失败：{exc}")
+    records = []
+    try:
+        for file_path in markdown_files:
+            print(f"[Chunking] {file_path.name}")
+            markdown = file_path.read_text(encoding="utf-8")
+            chunks = create_chunks_from_markdown(markdown, tokenizer, embedder)
+            print(f"  -> {len(chunks)} chunks")
+            for chunk in chunks:
+                records.append(
+                    {
+                        **chunk,
+                        "source": file_path.stem,
+                        "source_file": file_path.name,
+                    }
+                )
 
-    print("\nRAG Knowledge Base 构建完成。")
+        texts = [EMBEDDING_PASSAGE_PREFIX + record["text"] for record in records]
+        print(f"[Embedding] 正在编码 {len(texts)} 个Chunks...")
+        embeddings = embedder.encode(texts)
+    finally:
+        embedder.close()
+
+    collection = recreate_collection()
+    batch_size = 128
+    for start in range(0, len(records), batch_size):
+        batch = records[start:start + batch_size]
+        batch_embeddings = embeddings[start:start + batch_size]
+        collection.add(
+            ids=[
+                create_chunk_id(
+                    item["source"],
+                    item["section"],
+                    item["chunk_index"],
+                    item["text"],
+                )
+                for item in batch
+            ],
+            documents=[item["text"] for item in batch],
+            embeddings=[embedding.tolist() for embedding in batch_embeddings],
+            metadatas=[
+                {
+                    "source": item["source"],
+                    "source_file": item["source_file"],
+                    "section": item["section"],
+                    "chunk_index": item["chunk_index"],
+                    "token_count": item["token_count"],
+                    "chunk_method": CHUNK_METHOD,
+                    "block_types": ",".join(item["block_types"]),
+                }
+                for item in batch
+            ],
+        )
+
+    summary = {
+        "documents": len(markdown_files),
+        "chunks": len(records),
+        "collection": COLLECTION_NAME,
+        "chunk_method": CHUNK_METHOD,
+        "max_chunk_tokens": MAX_CHUNK_TOKENS,
+        "min_chunk_tokens": MIN_CHUNK_TOKENS,
+        "chunk_tokenizer": CHUNK_TOKENIZER_MODEL,
+        "embedding_model": EMBEDDING_MODEL,
+    }
+    CHROMA_DIR.mkdir(parents=True, exist_ok=True)
+    (CHROMA_DIR / "build_summary.json").write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    return summary
 
 
 if __name__ == "__main__":

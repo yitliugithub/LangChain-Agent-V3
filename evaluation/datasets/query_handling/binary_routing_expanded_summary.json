@@ -1,0 +1,25 @@
+{
+  "base_questions": 29,
+  "accepted_candidates": 3,
+  "rejected_candidates": 7,
+  "total_questions": 32,
+  "action_distribution": {
+    "retrieve": 26,
+    "clarify": 6
+  },
+  "majority_class_baseline_accuracy": 0.8125,
+  "accepted_query_ids": [
+    "QHC03",
+    "QHC04",
+    "QHC09"
+  ],
+  "rejected_query_ids": [
+    "QHC01",
+    "QHC02",
+    "QHC05",
+    "QHC06",
+    "QHC07",
+    "QHC08",
+    "QHC10"
+  ]
+}

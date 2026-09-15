@@ -1,0 +1,26 @@
+{
+  "selected_questions": 57,
+  "unique_source_chunks": 41,
+  "documents": {
+    "2024年Social&KOL营销趋势报告": 9,
+    "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团": 1,
+    "2025中国量贩零食行业现状报告": 14,
+    "2025年中国宠物行业市场报告": 14,
+    "2025年中国银发经济研究报告": 4,
+    "2025年品牌营销趋势报告": 12,
+    "2025年社交媒体与KOL营销趋势报告": 1,
+    "2025电通体育与娱乐趋势报告": 1,
+    "全是变化的信号：2025私域趋势白皮书暨年度调研报告": 1
+  },
+  "question_types": {
+    "explain": 22,
+    "number": 13,
+    "fact": 17,
+    "compare": 5
+  },
+  "difficulties": {
+    "medium": 25,
+    "easy": 32
+  },
+  "selection_rule": "Keep marker contains yes, ignoring spaces and case"
+}

@@ -1,0 +1,1336 @@
+[
+  {
+    "term": "私域",
+    "score": 86.028,
+    "frequency": 276,
+    "minimum_pmi": 8.553,
+    "boundary_entropy": 4.565,
+    "document_count": 10,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025中国量贩零食行业现状报告"
+    ],
+    "default_jieba_tokens": [
+      "私",
+      "域"
+    ],
+    "custom_jieba_tokens": [
+      "私域"
+    ]
+  },
+  {
+    "term": "抖音",
+    "score": 79.409,
+    "frequency": 157,
+    "minimum_pmi": 9.704,
+    "boundary_entropy": 2.418,
+    "document_count": 10,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025中国量贩零食行业现状报告"
+    ],
+    "default_jieba_tokens": [
+      "抖",
+      "音"
+    ],
+    "custom_jieba_tokens": [
+      "抖音"
+    ]
+  },
+  {
+    "term": "小红书",
+    "score": 76.806,
+    "frequency": 163,
+    "minimum_pmi": 8.713,
+    "boundary_entropy": 1.724,
+    "document_count": 9,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年中国宠物行业市场报告"
+    ],
+    "default_jieba_tokens": [
+      "小",
+      "红",
+      "书"
+    ],
+    "custom_jieba_tokens": [
+      "小红书"
+    ]
+  },
+  {
+    "term": "美妆",
+    "score": 72.38,
+    "frequency": 80,
+    "minimum_pmi": 9.156,
+    "boundary_entropy": 1.723,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "美",
+      "妆"
+    ],
+    "custom_jieba_tokens": [
+      "美妆"
+    ]
+  },
+  {
+    "term": "银发经济",
+    "score": 69.914,
+    "frequency": 103,
+    "minimum_pmi": 9.137,
+    "boundary_entropy": 1.853,
+    "document_count": 2,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年中国宠物行业市场报告",
+      "2025年中国银发经济研究报告"
+    ],
+    "default_jieba_tokens": [
+      "银发",
+      "经济"
+    ],
+    "custom_jieba_tokens": [
+      "银发经济"
+    ]
+  },
+  {
+    "term": "微博",
+    "score": 66.961,
+    "frequency": 32,
+    "minimum_pmi": 9.293,
+    "boundary_entropy": 2.15,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年中国宠物行业市场报告",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "微",
+      "博"
+    ],
+    "custom_jieba_tokens": [
+      "微博"
+    ]
+  },
+  {
+    "term": "微信",
+    "score": 64.744,
+    "frequency": 36,
+    "minimum_pmi": 7.02,
+    "boundary_entropy": 2.334,
+    "document_count": 7,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "微",
+      "信"
+    ],
+    "custom_jieba_tokens": [
+      "微信"
+    ]
+  },
+  {
+    "term": "垂类",
+    "score": 63.42,
+    "frequency": 18,
+    "minimum_pmi": 7.634,
+    "boundary_entropy": 3.614,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年品牌营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025抖音家电行业趋势风向指南"
+    ],
+    "default_jieba_tokens": [
+      "垂",
+      "类"
+    ],
+    "custom_jieba_tokens": [
+      "垂类"
+    ]
+  },
+  {
+    "term": "消费升级",
+    "score": 62.585,
+    "frequency": 35,
+    "minimum_pmi": 6.108,
+    "boundary_entropy": 2.786,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告",
+      "2025抖音家电行业趋势风向指南"
+    ],
+    "default_jieba_tokens": [
+      "消费",
+      "升级"
+    ],
+    "custom_jieba_tokens": [
+      "消费升级"
+    ]
+  },
+  {
+    "term": "微播易",
+    "score": 61.081,
+    "frequency": 38,
+    "minimum_pmi": 10.074,
+    "boundary_entropy": 1.021,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "微",
+      "播",
+      "易"
+    ],
+    "custom_jieba_tokens": [
+      "微播易"
+    ]
+  },
+  {
+    "term": "微短剧",
+    "score": 60.617,
+    "frequency": 20,
+    "minimum_pmi": 8.419,
+    "boundary_entropy": 2.764,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "微",
+      "短剧"
+    ],
+    "custom_jieba_tokens": [
+      "微短剧"
+    ]
+  },
+  {
+    "term": "量贩零食",
+    "score": 59.932,
+    "frequency": 311,
+    "minimum_pmi": 7.341,
+    "boundary_entropy": 2.997,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告"
+    ],
+    "default_jieba_tokens": [
+      "量",
+      "贩",
+      "零食"
+    ],
+    "custom_jieba_tokens": [
+      "量贩零食"
+    ]
+  },
+  {
+    "term": "沉浸式",
+    "score": 59.347,
+    "frequency": 14,
+    "minimum_pmi": 8.051,
+    "boundary_entropy": 2.118,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年中国宠物行业市场报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025抖音家电行业趋势风向指南"
+    ],
+    "default_jieba_tokens": [
+      "沉浸",
+      "式"
+    ],
+    "custom_jieba_tokens": [
+      "沉浸式"
+    ]
+  },
+  {
+    "term": "短视频",
+    "score": 58.634,
+    "frequency": 77,
+    "minimum_pmi": 9.254,
+    "boundary_entropy": 2.913,
+    "document_count": 7,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "短",
+      "视频"
+    ],
+    "custom_jieba_tokens": [
+      "短视频"
+    ]
+  },
+  {
+    "term": "快手",
+    "score": 58.335,
+    "frequency": 26,
+    "minimum_pmi": 6.94,
+    "boundary_entropy": 1.076,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "快",
+      "手"
+    ],
+    "custom_jieba_tokens": [
+      "快手"
+    ]
+  },
+  {
+    "term": "达人",
+    "score": 57.843,
+    "frequency": 133,
+    "minimum_pmi": 5.663,
+    "boundary_entropy": 3.26,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "达",
+      "人"
+    ],
+    "custom_jieba_tokens": [
+      "达人"
+    ]
+  },
+  {
+    "term": "大健康",
+    "score": 57.345,
+    "frequency": 33,
+    "minimum_pmi": 3.882,
+    "boundary_entropy": 2.043,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年中国银发经济研究报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "全是变化的信号：2025私域趋势白皮书暨年度调研报告"
+    ],
+    "default_jieba_tokens": [
+      "大",
+      "健康"
+    ],
+    "custom_jieba_tokens": [
+      "大健康"
+    ]
+  },
+  {
+    "term": "文旅",
+    "score": 56.346,
+    "frequency": 14,
+    "minimum_pmi": 7.656,
+    "boundary_entropy": 2.414,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年中国宠物行业市场报告",
+      "2025年中国银发经济研究报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "文",
+      "旅"
+    ],
+    "custom_jieba_tokens": [
+      "文旅"
+    ]
+  },
+  {
+    "term": "触达",
+    "score": 55.81,
+    "frequency": 48,
+    "minimum_pmi": 8.225,
+    "boundary_entropy": 3.949,
+    "document_count": 9,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "触",
+      "达"
+    ],
+    "custom_jieba_tokens": [
+      "触达"
+    ]
+  },
+  {
+    "term": "顶流",
+    "score": 55.315,
+    "frequency": 11,
+    "minimum_pmi": 8.055,
+    "boundary_entropy": 2.404,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025抖音家电行业趋势风向指南",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "顶",
+      "流"
+    ],
+    "custom_jieba_tokens": [
+      "顶流"
+    ]
+  },
+  {
+    "term": "跨界",
+    "score": 55.297,
+    "frequency": 42,
+    "minimum_pmi": 9.831,
+    "boundary_entropy": 2.96,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告"
+    ],
+    "default_jieba_tokens": [
+      "跨",
+      "界"
+    ],
+    "custom_jieba_tokens": [
+      "跨界"
+    ]
+  },
+  {
+    "term": "结果型",
+    "score": 54.718,
+    "frequency": 26,
+    "minimum_pmi": 6.952,
+    "boundary_entropy": 1.508,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "结果",
+      "型"
+    ],
+    "custom_jieba_tokens": [
+      "结果型"
+    ]
+  },
+  {
+    "term": "快消",
+    "score": 54.544,
+    "frequency": 28,
+    "minimum_pmi": 4.142,
+    "boundary_entropy": 1.02,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年中国宠物行业市场报告",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "快",
+      "消"
+    ],
+    "custom_jieba_tokens": [
+      "快消"
+    ]
+  },
+  {
+    "term": "漂亮饭",
+    "score": 53.936,
+    "frequency": 10,
+    "minimum_pmi": 12.76,
+    "boundary_entropy": 0.0,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "餐饮消费洞察2025"
+    ],
+    "default_jieba_tokens": [
+      "漂亮",
+      "饭"
+    ],
+    "custom_jieba_tokens": [
+      "漂亮饭"
+    ]
+  },
+  {
+    "term": "社交媒体",
+    "score": 53.747,
+    "frequency": 48,
+    "minimum_pmi": 7.843,
+    "boundary_entropy": 3.205,
+    "document_count": 9,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025中国量贩零食行业现状报告"
+    ],
+    "default_jieba_tokens": [
+      "社交",
+      "媒体"
+    ],
+    "custom_jieba_tokens": [
+      "社交媒体"
+    ]
+  },
+  {
+    "term": "小程序",
+    "score": 51.595,
+    "frequency": 9,
+    "minimum_pmi": 8.341,
+    "boundary_entropy": 0.986,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025年中国银发经济研究报告",
+      "2025年品牌营销趋势报告",
+      "餐饮消费洞察2025"
+    ],
+    "default_jieba_tokens": [
+      "小",
+      "程序"
+    ],
+    "custom_jieba_tokens": [
+      "小程序"
+    ]
+  },
+  {
+    "term": "江小白",
+    "score": 51.374,
+    "frequency": 8,
+    "minimum_pmi": 10.291,
+    "boundary_entropy": 0.544,
+    "document_count": 2,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "江",
+      "小",
+      "白"
+    ],
+    "custom_jieba_tokens": [
+      "江小白"
+    ]
+  },
+  {
+    "term": "盲盒",
+    "score": 51.365,
+    "frequency": 19,
+    "minimum_pmi": 12.785,
+    "boundary_entropy": 2.289,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "盲",
+      "盒"
+    ],
+    "custom_jieba_tokens": [
+      "盲盒"
+    ]
+  },
+  {
+    "term": "味型",
+    "score": 51.123,
+    "frequency": 18,
+    "minimum_pmi": 5.663,
+    "boundary_entropy": 1.945,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团"
+    ],
+    "default_jieba_tokens": [
+      "味",
+      "型"
+    ],
+    "custom_jieba_tokens": [
+      "味型"
+    ]
+  },
+  {
+    "term": "社媒",
+    "score": 51.039,
+    "frequency": 59,
+    "minimum_pmi": 6.675,
+    "boundary_entropy": 1.996,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年中国宠物行业市场报告",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "社",
+      "媒"
+    ],
+    "custom_jieba_tokens": [
+      "社媒"
+    ]
+  },
+  {
+    "term": "提效",
+    "score": 50.771,
+    "frequency": 15,
+    "minimum_pmi": 3.021,
+    "boundary_entropy": 1.37,
+    "document_count": 6,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "提",
+      "效"
+    ],
+    "custom_jieba_tokens": [
+      "提效"
+    ]
+  },
+  {
+    "term": "醉鹅娘",
+    "score": 50.626,
+    "frequency": 4,
+    "minimum_pmi": 14.344,
+    "boundary_entropy": 0.0,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团"
+    ],
+    "default_jieba_tokens": [
+      "醉",
+      "鹅",
+      "娘"
+    ],
+    "custom_jieba_tokens": [
+      "醉鹅娘"
+    ]
+  },
+  {
+    "term": "复购",
+    "score": 50.573,
+    "frequency": 42,
+    "minimum_pmi": 7.746,
+    "boundary_entropy": 2.162,
+    "document_count": 6,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "复",
+      "购"
+    ],
+    "custom_jieba_tokens": [
+      "复购"
+    ]
+  },
+  {
+    "term": "带货",
+    "score": 49.802,
+    "frequency": 25,
+    "minimum_pmi": 8.316,
+    "boundary_entropy": 3.163,
+    "document_count": 6,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年中国宠物行业市场报告",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "带",
+      "货"
+    ],
+    "custom_jieba_tokens": [
+      "带货"
+    ]
+  },
+  {
+    "term": "洗烘套装",
+    "score": 48.424,
+    "frequency": 5,
+    "minimum_pmi": 11.037,
+    "boundary_entropy": 0.722,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase",
+      "section"
+    ],
+    "example_documents": [
+      "2025抖音家电行业趋势风向指南"
+    ],
+    "default_jieba_tokens": [
+      "洗",
+      "烘",
+      "套装"
+    ],
+    "custom_jieba_tokens": [
+      "洗烘套装"
+    ]
+  },
+  {
+    "term": "复购率",
+    "score": 48.014,
+    "frequency": 24,
+    "minimum_pmi": 8.241,
+    "boundary_entropy": 2.467,
+    "document_count": 6,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "复",
+      "购",
+      "率"
+    ],
+    "custom_jieba_tokens": [
+      "复购率"
+    ]
+  },
+  {
+    "term": "商单",
+    "score": 47.446,
+    "frequency": 88,
+    "minimum_pmi": 6.389,
+    "boundary_entropy": 1.242,
+    "document_count": 2,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "商",
+      "单"
+    ],
+    "custom_jieba_tokens": [
+      "商单"
+    ]
+  },
+  {
+    "term": "营收",
+    "score": 46.75,
+    "frequency": 35,
+    "minimum_pmi": 4.766,
+    "boundary_entropy": 3.125,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "营",
+      "收"
+    ],
+    "custom_jieba_tokens": [
+      "营收"
+    ]
+  },
+  {
+    "term": "互动量",
+    "score": 46.099,
+    "frequency": 82,
+    "minimum_pmi": 6.404,
+    "boundary_entropy": 0.809,
+    "document_count": 2,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团"
+    ],
+    "default_jieba_tokens": [
+      "互动",
+      "量"
+    ],
+    "custom_jieba_tokens": [
+      "互动量"
+    ]
+  },
+  {
+    "term": "徐志胜",
+    "score": 46.0,
+    "frequency": 1,
+    "minimum_pmi": 15.666,
+    "boundary_entropy": 0.0,
+    "document_count": 1,
+    "sources": [
+      "section"
+    ],
+    "example_documents": [
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "徐",
+      "志",
+      "胜"
+    ],
+    "custom_jieba_tokens": [
+      "徐志胜"
+    ]
+  },
+  {
+    "term": "线上渠道",
+    "score": 45.676,
+    "frequency": 20,
+    "minimum_pmi": 6.964,
+    "boundary_entropy": 2.884,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告",
+      "2025年中国银发经济研究报告"
+    ],
+    "default_jieba_tokens": [
+      "线",
+      "上",
+      "渠道"
+    ],
+    "custom_jieba_tokens": [
+      "线上渠道"
+    ]
+  },
+  {
+    "term": "单品",
+    "score": 45.183,
+    "frequency": 44,
+    "minimum_pmi": 3.341,
+    "boundary_entropy": 2.606,
+    "document_count": 8,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告"
+    ],
+    "default_jieba_tokens": [
+      "单",
+      "品"
+    ],
+    "custom_jieba_tokens": [
+      "单品"
+    ]
+  },
+  {
+    "term": "內容",
+    "score": 44.964,
+    "frequency": 3,
+    "minimum_pmi": 9.418,
+    "boundary_entropy": 0.918,
+    "document_count": 2,
+    "sources": [
+      "section"
+    ],
+    "example_documents": [
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "內",
+      "容"
+    ],
+    "custom_jieba_tokens": [
+      "內容"
+    ]
+  },
+  {
+    "term": "爆款",
+    "score": 44.658,
+    "frequency": 12,
+    "minimum_pmi": 9.63,
+    "boundary_entropy": 2.855,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年品牌营销趋势报告",
+      "2025抖音家电行业趋势风向指南"
+    ],
+    "default_jieba_tokens": [
+      "爆",
+      "款"
+    ],
+    "custom_jieba_tokens": [
+      "爆款"
+    ]
+  },
+  {
+    "term": "大数据",
+    "score": 43.712,
+    "frequency": 39,
+    "minimum_pmi": 4.068,
+    "boundary_entropy": 1.75,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025中国量贩零食行业现状报告",
+      "2025年中国宠物行业市场报告"
+    ],
+    "default_jieba_tokens": [
+      "大",
+      "数据"
+    ],
+    "custom_jieba_tokens": [
+      "大数据"
+    ]
+  },
+  {
+    "term": "李嘉琦",
+    "score": 43.622,
+    "frequency": 1,
+    "minimum_pmi": 14.081,
+    "boundary_entropy": 0.0,
+    "document_count": 1,
+    "sources": [
+      "section"
+    ],
+    "example_documents": [
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "李",
+      "嘉",
+      "琦"
+    ],
+    "custom_jieba_tokens": [
+      "李嘉琦"
+    ]
+  },
+  {
+    "term": "热搜",
+    "score": 42.8,
+    "frequency": 13,
+    "minimum_pmi": 7.499,
+    "boundary_entropy": 2.507,
+    "document_count": 5,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "热",
+      "搜"
+    ],
+    "custom_jieba_tokens": [
+      "热搜"
+    ]
+  },
+  {
+    "term": "预制菜",
+    "score": 42.771,
+    "frequency": 18,
+    "minimum_pmi": 9.276,
+    "boundary_entropy": 3.059,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "餐饮消费洞察2025"
+    ],
+    "default_jieba_tokens": [
+      "预制",
+      "菜"
+    ],
+    "custom_jieba_tokens": [
+      "预制菜"
+    ]
+  },
+  {
+    "term": "大单品",
+    "score": 42.757,
+    "frequency": 24,
+    "minimum_pmi": 6.401,
+    "boundary_entropy": 2.718,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团",
+      "2025年品牌营销趋势报告",
+      "餐饮消费洞察2025"
+    ],
+    "default_jieba_tokens": [
+      "大",
+      "单",
+      "品"
+    ],
+    "custom_jieba_tokens": [
+      "大单品"
+    ]
+  },
+  {
+    "term": "丸美",
+    "score": 42.751,
+    "frequency": 3,
+    "minimum_pmi": 8.943,
+    "boundary_entropy": 0.918,
+    "document_count": 1,
+    "sources": [
+      "section"
+    ],
+    "example_documents": [
+      "2025年品牌营销趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "丸",
+      "美"
+    ],
+    "custom_jieba_tokens": [
+      "丸美"
+    ]
+  },
+  {
+    "term": "安慕希",
+    "score": 41.656,
+    "frequency": 2,
+    "minimum_pmi": 10.821,
+    "boundary_entropy": 0.0,
+    "document_count": 1,
+    "sources": [
+      "section"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团"
+    ],
+    "default_jieba_tokens": [
+      "安",
+      "慕",
+      "希"
+    ],
+    "custom_jieba_tokens": [
+      "安慕希"
+    ]
+  },
+  {
+    "term": "适老化",
+    "score": 41.548,
+    "frequency": 22,
+    "minimum_pmi": 6.767,
+    "boundary_entropy": 2.89,
+    "document_count": 2,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025年中国宠物行业市场报告",
+      "2025年中国银发经济研究报告"
+    ],
+    "default_jieba_tokens": [
+      "适",
+      "老化"
+    ],
+    "custom_jieba_tokens": [
+      "适老化"
+    ]
+  },
+  {
+    "term": "三得利",
+    "score": 41.479,
+    "frequency": 14,
+    "minimum_pmi": 9.65,
+    "boundary_entropy": 2.985,
+    "document_count": 1,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国消费者生活方式演进趋势系列报告——酒水饮料篇-省广集团"
+    ],
+    "default_jieba_tokens": [
+      "三",
+      "得利"
+    ],
+    "custom_jieba_tokens": [
+      "三得利"
+    ]
+  },
+  {
+    "term": "三只松鼠",
+    "score": 41.473,
+    "frequency": 17,
+    "minimum_pmi": 9.815,
+    "boundary_entropy": 1.45,
+    "document_count": 2,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025中国量贩零食行业现状报告",
+      "2025年中国银发经济研究报告"
+    ],
+    "default_jieba_tokens": [
+      "三只",
+      "松鼠"
+    ],
+    "custom_jieba_tokens": [
+      "三只松鼠"
+    ]
+  },
+  {
+    "term": "线上流量",
+    "score": 40.945,
+    "frequency": 14,
+    "minimum_pmi": 6.674,
+    "boundary_entropy": 2.7,
+    "document_count": 4,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2025年中国宠物行业市场报告",
+      "2025年品牌营销趋势报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "线",
+      "上",
+      "流量"
+    ],
+    "custom_jieba_tokens": [
+      "线上流量"
+    ]
+  },
+  {
+    "term": "非遗",
+    "score": 40.905,
+    "frequency": 10,
+    "minimum_pmi": 10.377,
+    "boundary_entropy": 1.771,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "2025电通体育与娱乐趋势报告"
+    ],
+    "default_jieba_tokens": [
+      "非",
+      "遗"
+    ],
+    "custom_jieba_tokens": [
+      "非遗"
+    ]
+  },
+  {
+    "term": "鞋服",
+    "score": 40.507,
+    "frequency": 20,
+    "minimum_pmi": 8.118,
+    "boundary_entropy": 0.934,
+    "document_count": 3,
+    "sources": [
+      "corpus_phrase"
+    ],
+    "example_documents": [
+      "2024年Social&KOL营销趋势报告",
+      "2025年社交媒体与KOL营销趋势报告",
+      "全是变化的信号：2025私域趋势白皮书暨年度调研报告"
+    ],
+    "default_jieba_tokens": [
+      "鞋",
+      "服"
+    ],
+    "custom_jieba_tokens": [
+      "鞋服"
+    ]
+  },
+  {
+    "term": "内容",
+    "score": null,
+    "frequency": null,
+    "minimum_pmi": null,
+    "boundary_entropy": null,
+    "document_count": null,
+    "sources": [
+      "manual_extra_term"
+    ],
+    "example_documents": [],
+    "default_jieba_tokens": [
+      "内容"
+    ],
+    "custom_jieba_tokens": [
+      "内容"
+    ]
+  }
+]

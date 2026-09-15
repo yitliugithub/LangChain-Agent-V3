@@ -1,0 +1,22 @@
+{
+  "accepted_questions": 29,
+  "rejected_questions": 0,
+  "action_distribution": {
+    "retrieve": 26,
+    "clarify": 3
+  },
+  "majority_class_baseline_accuracy": 0.896552,
+  "normalizations": [
+    {
+      "query_id": "QH03-3",
+      "change": "Cleared stale clarification fields for retrieve"
+    },
+    {
+      "query_id": "QH04-3",
+      "change": "Cleared stale clarification fields for retrieve"
+    }
+  ],
+  "rejected_query_ids": [],
+  "ready_for_formal_evaluation": false,
+  "readiness_note": "Add more clarify examples before formal evaluation"
+}

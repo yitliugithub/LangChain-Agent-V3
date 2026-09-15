@@ -1,0 +1,25 @@
+{
+  "base_questions": 32,
+  "accepted_round2": 6,
+  "rejected_round2": 4,
+  "total_questions": 38,
+  "action_distribution": {
+    "retrieve": 26,
+    "clarify": 12
+  },
+  "majority_class_baseline_accuracy": 0.684211,
+  "accepted_query_ids": [
+    "QHD01",
+    "QHD03",
+    "QHD04",
+    "QHD05",
+    "QHD07",
+    "QHD08"
+  ],
+  "rejected_query_ids": [
+    "QHD02",
+    "QHD06",
+    "QHD09",
+    "QHD10"
+  ]
+}

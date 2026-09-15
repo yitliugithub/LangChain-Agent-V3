@@ -14,7 +14,7 @@ MYSQL_USER = os.getenv("MYSQL_USER")
 MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
 MYSQL_DATABASE = os.getenv("MYSQL_DATABASE")
 
-MODEL_NAME = "deepseek-v4-flash"
+MODEL_NAME = "deepseek-flash"
 DEEPSEEK_CHAT_URL = (
     DEEPSEEK_BASE_URL.rstrip("/") + "/chat/completions"
     if DEEPSEEK_BASE_URL
