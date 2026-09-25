@@ -295,8 +295,10 @@ def prepare_report_context(brief_path: str | Path, include_rag: bool = True) -> 
     return context
 
 
-def _load_report_instructions() -> str:
-    skill = load_skill(REPORT_SKILL_NAME)
+def _load_report_instructions(skill_name: str = REPORT_SKILL_NAME) -> str:
+    if skill_name != REPORT_SKILL_NAME:
+        raise ValueError(f"报告流程不支持 Skill：{skill_name}")
+    skill = load_skill(skill_name)
     reference = skill.directory / "references" / "report-format.md"
     return skill.instructions + "\n\n" + reference.read_text(encoding="utf-8")
 
@@ -306,10 +308,14 @@ def _safe_name(value: str) -> str:
     return cleaned or "research_report"
 
 
-def generate_research_report(chat_model, brief_path: str | Path) -> Path:
+def generate_research_report(
+    chat_model,
+    brief_path: str | Path,
+    skill_name: str = REPORT_SKILL_NAME,
+) -> Path:
     context = prepare_report_context(brief_path, include_rag=True)
     task = context["research_task"]
-    instructions = _load_report_instructions()
+    instructions = _load_report_instructions(skill_name)
     response = chat_model.invoke(
         [
             SystemMessage(

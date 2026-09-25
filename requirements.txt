@@ -3,6 +3,7 @@ python-dotenv>=1.0.0
 mysql-connector-python>=9.0.0
 chromadb>=0.5.0
 sentence-transformers>=3.0.0
+tiktoken>=0.7.0,<1.0.0
 pymupdf4llm>=0.0.17
 jieba>=0.42.1
 numpy>=1.26.0
